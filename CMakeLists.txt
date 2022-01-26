@@ -38,7 +38,7 @@ endif()
 
 # Specify general include directory
 ################
-include_directories( ${CMAKE_SOURCE_DIR}/src/ )
+include_directories( ${CMAKE_SOURCE_DIR}/include/ )
 
 # Specify that the output executable is placed in the root build directory
 ################
@@ -48,6 +48,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 ################
 set(LIBRARY_OUTPUT_PATH    ${CMAKE_SOURCE_DIR}/lib/${PROJECT_NAME})
 link_directories(${LIBRARY_OUTPUT_PATH})
+
 
 # Find prerequisites
 ####################
