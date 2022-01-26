@@ -4,6 +4,7 @@ This repository should give an impression how C++ and Python could work together
 ## Building
 
 ```
+git clone --recurse-submodules <url of this project>
 mkdir build && cd build
 cmake ..
 make
