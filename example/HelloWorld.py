@@ -1,9 +1,18 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-from ViennaTestProject import ModuleA
+from ViennaExample import HelloWorld
 
-hw = ModuleA.HelloWorld()
+# test construction
+hw = HelloWorld()
 
+# print "Hello, World!"
 hw.print()
 
-hw.print_something("This is an example!")
+# print our own text
+hw.print("This is an example!")
+
+# set new prefix for output
+hw.prefix = "Output: "
+
+# test output with prefix
+hw.print()

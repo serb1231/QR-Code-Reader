@@ -1,111 +1,164 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.7...3.22)
 
-project(
-  "ViennaTestProject"
-  VERSION 0.0.1)
+################### PROJECT SETUP #################
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 
-add_definitions(-DVIENNARAY_VERSION=${PROJECT_VERSION})
+project("ViennaExample" LANGUAGES CXX VERSION 0.0.1)
 
-include(GNUInstallDirs)
+### Require out-of-source builds
+file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
+if(EXISTS "${LOC_PATH}")
+  message(FATAL_ERROR "You cannot build in a source directory (or any directory with a CMakeLists.txt file).
+    Please create a separate build subdirectory.")
+endif()
 
-# c++17 for inline constexpr variables
-SET(CMAKE_CXX_STANDARD "17")
+# Create a compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+################### PROJECT CONFIG ##############
+# Set c++17 as the required standard, and do not allow
+# compiler-specific extensions
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # set default build type
 SET(DEFAULT_BUILD_TYPE "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
+  message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}'")
   set(CMAKE_BUILD_TYPE "${DEFAULT_BUILD_TYPE}" CACHE
       STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+      "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
+
+set(PROJECT_ROOT_NAME ${PROJECT_NAME})
+set(PROJECT_ROOT_VERSION ${PROJECT_VERSION})
+set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(PROJECT_ROOT_BINARY_DIR ${CMAKE_BINARY_DIR})
 
 # tell VS to export all symbols to its dll files
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE CACHE BOOL "Export all symbols")
 endif()
 
-
-# # Check for VTK
-# ###################
-# find_package(VTK QUIET)
-# if (VTK_FOUND)
-#   message (STATUS "VTK_VERSION: ${VTK_VERSION}")
-#   include(${VTK_USE_FILE})
-# endif()
-
-# Specify general include directory
-################
-include_directories( ${CMAKE_SOURCE_DIR}/include/ )
-
-# Specify that the output executable is placed in the root build directory
-################
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-
-# Specify that the libraries are placed in the root build directory
-################
-set(LIBRARY_OUTPUT_PATH    ${CMAKE_SOURCE_DIR}/lib/${PROJECT_NAME})
-link_directories(${LIBRARY_OUTPUT_PATH})
+# When using clang, always use libc++
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
+endif()
 
 
-# Find prerequisites
-####################
-find_package(PythonLibs REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
-include_directories(pybind11/include/pybind11)
-include_directories( ${CMAKE_SOURCE_DIR}/src/ )
+################### DEPENDENCIES ################
+# Download conan cmake config and use it to automatically fetch all required packages
+if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+   message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+   file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/master/conan.cmake"
+                  "${CMAKE_BINARY_DIR}/conan.cmake")
+endif()
+
+# run conan install and create cmake targets
+include(${CMAKE_BINARY_DIR}/conan.cmake)
+conan_cmake_run(CONANFILE conanfile.py
+                BUILD missing
+                BASIC_SETUP CMAKE_TARGETS)
+
+# include cmake_paths generator file to get package-supplied PackageConfig.cmake
+include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 
 
-add_subdirectory(pybind11)
+################### BUILDING ####################
+include(GNUInstallDirs)
+
+# get all sources and headers
+file(GLOB CPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/lib/*.cpp")
+file(GLOB_RECURSE HPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
+
+# build shared library
+add_library(${PROJECT_NAME} SHARED ${CPP_FILES})
+# Adding the install interface generator expression makes sure that cmake 
+# chooses the correct include folder for current builds or already installed targets
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+# set library postfix if it is a debug build
+set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "d")
+
+# set target properties
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HPP_FILES}")
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+
+# enable strict standard, extra warnings
+target_compile_options(${PROJECT_NAME} PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+)
 
 
-# Building Module 
-######################
-set(SRC
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/pybind11/pyModuleA.cpp
-  )
+################### INSTALLING ##################
+# # set the correct paths for installation
+set(LOCAL_CONFIG_DIR "lib/cmake/${PROJECT_NAME}")
 
-pybind11_add_module(ModuleA ${SRC})
+# Adding the install interface generator expression makes sure that the include
+# files are installed to the proper location (provided by GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file("${PROJECT_NAME}ConfigVersion.cmake"
+                                 VERSION ${PROJECT_VERSION}
+                               COMPATIBILITY AnyNewerVersion)
 
-# Building Module with VTK dependency
-######################
-if (VTK_FOUND)
-  message (STATUS "VTK_VERSION: ${VTK_VERSION}")
-  include(${VTK_USE_FILE})
+# automatically generate config files
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  INSTALL_DESTINATION
+  ${LOCAL_CONFIG_DIR})
 
-  set(SRC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/pybind11/pyVTKModule.cpp
-    )
+# install library target to lib location and headers to include location
+install(TARGETS ${PROJECT_NAME}
+        EXPORT ${PROJECT_NAME}_Targets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 
-  pybind11_add_module(VTKModule ${SRC})
-  target_link_libraries(VTKModule PRIVATE ${VTK_LIBRARIES})
+# install exported targets
+install(EXPORT ${PROJECT_NAME}_Targets
+        FILE ${PROJECT_NAME}Targets.cmake
+        DESTINATION ${LOCAL_CONFIG_DIR})
 
-endif() # vtk dependencies
+# Install the generated config files
+install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+              "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        DESTINATION ${LOCAL_CONFIG_DIR})
 
 
-#Building Docs
-##############
-option(BUILD_DOC "Build documentation" ON)
+################### WRAPPING ####################
+# wrap library for use in different languages
+option(BUILD_PYTHON "Build python module" ON)
+if(BUILD_PYTHON)
+  add_subdirectory(wrapping)
+endif()
 
-# check if Doxygen is installed
-find_package(Doxygen)
-if (DOXYGEN_FOUND)
-  # set input and output files
-  set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
-  set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
-  # request to configure the file
-  configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-  message("Doxygen build started")
+################### TESTING #####################
+# only include tests if the current project is being built
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  include(CTest)
+endif()
 
-  # note the option ALL which allows to build the docs together with the application
-  add_custom_target( doc_doxygen ALL
-    COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen"
-    VERBATIM )
-else (DOXYGEN_FOUND)
-  message("Doxygen need to be installed to generate the doxygen documentation")
-endif (DOXYGEN_FOUND)
+# if we are building the current project and tests should be built
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+  add_subdirectory(test)
+endif()
+
+
+################## DOCUMENTATION ################
+option(BUILD_DOCS "Build documentation" OFF)
+if(BUILD_DOCS)
+  add_subdirectory(docs)
+endif()
