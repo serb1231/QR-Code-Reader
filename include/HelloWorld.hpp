@@ -13,8 +13,8 @@ struct HelloWorld {
   HelloWorld();
   /// This function just prints "Hello"
   void printHello();
-  /// print function prints "HelloWorld!"
+  /// Prints "HelloWorld!"
   void print();
-  /// This prints the std::sring simething
+  /// This prints the std::sring something
   void print(std::string something);
 };
