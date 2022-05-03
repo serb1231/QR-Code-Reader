@@ -8,6 +8,9 @@ This repository should give an impression how C++ and Python could work together
 - `conan` (for dependency management)
 - `CMake`
 - `C++17 Compiler`
+- `python3`
+- `python3-pip`
+- `python3-venv`
 
 ### Supported Platforms
 
