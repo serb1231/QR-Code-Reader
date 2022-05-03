@@ -7,7 +7,7 @@ class ConanSetup(ConanFile):
     name = "ViennaExample"
     version = "0.1.0"
     license = "GNU Lesser General Public License version 3 (LGPL-3.0)"
-    author = "Xaver klemenschits@iue.tuwien.ac.at"
+    author = "Xaver klemenschits@iue.tuwien.ac.at, Markus kampl@iue.tuwien.ac.at"
     url = ""
     description = "ViennaExample is a cleaned up C++ project template."
     topics = ("Example", "Template", "Project")

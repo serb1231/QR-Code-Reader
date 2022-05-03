@@ -1,4 +1,4 @@
-# ViennaTestProject
+# ViennaExample
 
 This repository should give an impression how C++ and Python could work together with pybind11, using cmake as an build-environment and doxygen for documentation.
 
@@ -33,12 +33,12 @@ make
 The built python wheel is then under `build/wheel/ViennaExample*.whl`.
 In order to install the package, run:
 ```
-cd build/wheel
-python3 -m venv test_env # create virtual environment
-source test_env/bin/activate
-pip3 install ViennaExample-*-*.whl # this will depend on the library version
+cd build
+python3 -m venv venv # create virtual environment
+source venv/bin/activate
+pip3 install wheel/ViennaExample-*-*.whl # this will depend on the library version
 # Test the installed module by running the example
-../../example/HelloWorld.py
+../example/HelloWorld.py
 ```
 
 --------------------------
@@ -59,6 +59,7 @@ To run the tests:
 cd build
 cmake ..
 make buildtests
+make buildpytests
 make test
 ```
 
