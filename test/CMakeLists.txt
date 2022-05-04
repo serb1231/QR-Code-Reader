@@ -6,7 +6,7 @@ project(Tests LANGUAGES CXX)
 # make a custom target for usage with make
 # all tests can be built using `make buildtests`
 set(TEST_BUILD_TARGET buildtests)
-add_custom_target(${TEST_BUILD_TARGET})
+add_custom_target(${TEST_BUILD_TARGET} ALL)
 
 set(MY_TEST_NAMES "")
 list(APPEND MY_TEST_NAMES "ClassHelloWorld")
@@ -45,7 +45,7 @@ add_custom_command(
 add_custom_target(venv DEPENDS ${OUTPUT_FILE})
 
 set(TEST_BUILD_TARGET buildpytests)
-add_custom_target(${TEST_BUILD_TARGET} DEPENDS venv)
+add_custom_target(${TEST_BUILD_TARGET} ALL DEPENDS venv)
 
 set(MY_TEST_NAMES "")
 list(APPEND MY_TEST_NAMES "ClassHelloWorld")
