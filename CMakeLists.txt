@@ -113,7 +113,7 @@ write_basic_package_version_file("${PROJECT_NAME}ConfigVersion.cmake"
 
 # automatically generate config files
 configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProjectConfig.cmake.in"
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION
   ${LOCAL_CONFIG_DIR})

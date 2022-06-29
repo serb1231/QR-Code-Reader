@@ -4,7 +4,7 @@
 include(CMakeFindDependencyMacro)
 
 # Capturing values from configure time
-# set(VIENNA_EXAMPLE_VAR @VIENNA_EXAMPLE_VAR@)
+# set(PROJECT_VAR @PROJECT_VAR@)
 
 # Same syntax as find_package
 # find tbb for example
