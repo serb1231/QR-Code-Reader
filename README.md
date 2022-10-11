@@ -83,7 +83,7 @@ Please run ``format-project.sh`` before commiting.
 
 --------------------------
 ## Authors
-ViennaTestProject was developed under the aegis of the 'Institute for Microelectronics' at the 'TU Wien'.
+ViennaExample was developed under the aegis of the 'Institute for Microelectronics' at the 'TU Wien'.
 http://www.iue.tuwien.ac.at/
 
 --------------------------
