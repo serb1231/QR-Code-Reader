@@ -62,7 +62,7 @@ endif()
 
 # run conan install and create cmake targets
 include(${CMAKE_BINARY_DIR}/conan.cmake)
-conan_cmake_run(CONANFILE conanfile.py
+conan_cmake_run(CONANFILE conanfile.txt
                 BUILD missing
                 BASIC_SETUP CMAKE_TARGETS)
 
