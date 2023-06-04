@@ -17,9 +17,13 @@ git push
 
 
 
-#How to get branches from the server
+#How to get branches from the server (I think only needed once)
 git branch -a
 git checkout branch_name
+
+#How to update branches from the server
+git pull    #Only updates the current branch
+git fetch   #Updates every branch
 
 
 
