@@ -7,11 +7,14 @@ git config credential.helper 'cache --timeout=3600'
 
 git config --global  pull.ff true
 
+########################################
+
 //when first cloning the repo:
 
 git remote add origin https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
 git remote rename origin upstream
 
+########################################
 
 //use a new branch for every feature/issue. to create a branch do:
 
@@ -33,8 +36,9 @@ git push -u origin branch_name
 
 git push  
 
+########################################
 
-//before doing anything with merge/push/pull, always commit your changes, or revert them!
+//before doing anything with merge/push/pull/switch branches, always commit your changes, or revert them!
 
 
 //to get branches from the remote use:
@@ -61,3 +65,7 @@ git revert [commit_hash]
 //when reverting a merge, get the commit hash (yes merge commits and commit commits have the same name...) and then:
 
 git revert -m 1 [commit_hash] // 1 indicates that you want to "keep" the changes of the merge parent 1. you'll have to read more into it to know what that means
+
+//to delete a branch you dont need anymore
+
+git branch -D branch_name
