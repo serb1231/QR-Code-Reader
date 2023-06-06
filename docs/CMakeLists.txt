@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project("Documentation")
 
 # doxygen is required to build docs
-find_package(Doxygen REQUIRED)
+find_package(doxygen REQUIRED)
 
 # set folder structure we want to get in the end
 set(DOXYGEN_INPUT_DIR ${PROJECT_ROOT})
