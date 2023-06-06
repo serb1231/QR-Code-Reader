@@ -1,0 +1,75 @@
+//some useful profile settings:
+//so you don't have to insert credentials all the time:
+
+git config credential.helper 'cache --timeout=3600'
+
+//this sets the reconcile setting for merges to fast forward. i've read that it is the recommended approach
+
+git config --global  pull.ff true
+
+########################################
+
+//when first cloning the repo:
+
+git remote add origin https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
+git remote rename origin upstream
+
+########################################
+
+//use a new branch for every feature/issue. to create a branch do:
+
+git checkout -b branch_name
+
+//to commit (save) your work first do:
+
+git add . //adds all edited files to the staging area
+
+//then do this to commit your changes to your local copy of the repo:
+
+git commit branch_name -m "message"
+
+//then do this if it is the first ever push you are doing:
+
+git push -u origin branch_name
+
+//after that, this is enough:
+
+git push  
+
+########################################
+
+//before doing anything with merge/push/pull/switch branches, always commit your changes, or revert them!
+//in other words: if there is an asterisk (*) next to your branch name in vs code (bottom left in the toolbar) don't merge/push/pull/switch branches.
+
+//to get branches from the remote use:
+git pull
+//and then this, to list all branches (also the ones on the remote):
+git branch -a
+
+//to merge the state of the remote into your local state, use:
+git pull    //Only updates the current branch and merges automatically
+git fetch   //Updates every branch, but doesn't "save" or merge anything into your files
+
+//to update you current branch to the latest main state, use:
+git rebase main
+
+//to revert any changes you made use the following when working with a local commit:
+//first do:
+
+git log
+
+//and search for the commit you want to revert. then copy the hash (long alphanumeric string)
+//after that do:
+
+git revert [commit_hash]
+
+//when reverting a merge, get the commit hash (yes merge commits and commit commits have the same name...) and then:
+
+git revert -m 1 [commit_hash] // 1 indicates that you want to "keep" the changes of the merge parent 1. you'll have to read more into it to know what that means
+
+//when reverting uncommitted change just click in the version control button in vs code (button on the left underneath the lens) 
+//and underneath the commit button, in the drop down for changes, you can click the back arrow do discard edits
+
+//to delete a branch you dont need anymore
+
+git branch -D branch_name
