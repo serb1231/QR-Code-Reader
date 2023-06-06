@@ -61,13 +61,13 @@ if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
 endif()
 
 # run conan install and create cmake targets
-include(${CMAKE_BINARY_DIR}/conan.cmake)
+include("${CMAKE_BINARY_DIR}/conan.cmake")
 conan_cmake_run(CONANFILE conanfile.txt
                 BUILD missing
                 BASIC_SETUP CMAKE_TARGETS)
 
 # include cmake_paths generator file to get package-supplied PackageConfig.cmake
-include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
 
 
 ################### BUILDING ####################
@@ -80,9 +80,9 @@ file(GLOB_RECURSE HPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 # build shared library
 add_library(${PROJECT_NAME} SHARED ${CPP_FILES})
 
-find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
-target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS} )
+find_package(OpenCV REQUIRED)
+include_directories(${opencv_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${opencv_LIBS})
 
 # Adding the install interface generator expression makes sure that cmake 
 # chooses the correct include folder for current builds or already installed targets
