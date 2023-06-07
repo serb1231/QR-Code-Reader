@@ -80,6 +80,7 @@ file(GLOB_RECURSE HPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 # build shared library
 add_library(${PROJECT_NAME} SHARED ${CPP_FILES})
 
+#Find the OpenCV package
 find_package(OpenCV REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${opencv_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${opencv_LIBRARIES})
