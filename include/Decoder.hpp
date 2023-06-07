@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdio.h>
 
-///This class contains all the functionality to actually decode the QR-Code
+/// This class contains all the functionality to actually decode the QR-Code
 
 class Decoder{
     public:
