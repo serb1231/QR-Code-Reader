@@ -23,14 +23,11 @@ int Decoder::decode(cv::Mat QRimage){
     /// Create a QR code detector object
     cv::QRCodeDetector qrDetector;
 
-    /// Define a vector to store the output points of the detected quadrangle
+    /// Define a vector to store the output corner points of the detected Region
     std::vector<cv::Point> points;
     
-    /// Detect the QR code and obtain the quadrangle points
+    /// Detect the QR code and obtain the Region corner points
     bool detectionResult = qrDetector.detect(QRimage, points);
-
-    
-    std::cout << "Points: " << points << std::endl;
 
     cv::Mat croppedImage;
 
@@ -54,11 +51,11 @@ int Decoder::decode(cv::Mat QRimage){
         std::cout << "No QR code detected!" << std::endl;
     }
 
-    /// Check if image is in size range
+    /// Check if image is still in size range
     width = croppedImage.cols;
     height = croppedImage.rows;
 
-    /// Image too big, resize it to 500x500
+    /// Image too big, resize it to ~500x500
     while(width > 500 || height > 500)
     {
         width *= 0.9;
@@ -72,8 +69,7 @@ int Decoder::decode(cv::Mat QRimage){
     cv::Mat binaryImage;
     cv::threshold(croppedImage, binaryImage, 128, 255, cv::THRESH_BINARY);
 
-    /// Detect and decode the QR cod
-    //std::vector<cv::Point> points;  /// Stores the corner points of the QR code
+    /// Detect and decode the QR code
     cv::QRCodeDetector qrDecoder;
     std::string data = qrDecoder.detectAndDecode(binaryImage, points);
     if (!data.empty())
