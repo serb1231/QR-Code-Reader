@@ -81,8 +81,8 @@ file(GLOB_RECURSE HPP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 add_library(${PROJECT_NAME} SHARED ${CPP_FILES})
 
 find_package(OpenCV REQUIRED)
-include_directories(${opencv_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${opencv_LIBS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${opencv_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${opencv_LIBRARIES})
 
 # Adding the install interface generator expression makes sure that cmake 
 # chooses the correct include folder for current builds or already installed targets
