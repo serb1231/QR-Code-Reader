@@ -1,7 +1,7 @@
 /*
-* Copyright 2016 Nu-book Inc.
-* Copyright 2019 Axel Waggershauser
-*/
+ * Copyright 2016 Nu-book Inc.
+ * Copyright 2019 Axel Waggershauser
+ */
 // SPDX-License-Identifier: Apache-2.0
 
 #include "ZXing/ReadBarcode.h"
@@ -16,6 +16,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -24,7 +25,7 @@
 
 using namespace ZXing;
 
-static void PrintUsage(const char* exePath)
+static void PrintUsage(const char *exePath)
 {
 	std::cout << "Usage: " << exePath << " [options] <image file>...\n"
 			  << "    -fast      Skip some lines/pixels during detection (faster)\n"
@@ -45,43 +46,61 @@ static void PrintUsage(const char* exePath)
 			  << "    -version   Print version information\n"
 			  << "\n"
 			  << "Supported formats are:\n";
-	for (auto f : BarcodeFormats::all()) {
+	for (auto f : BarcodeFormats::all())
+	{
 		std::cout << "    " << ToString(f) << "\n";
 	}
 	std::cout << "Formats can be lowercase, with or without '-', separated by ',' and/or '|'\n";
 }
 
-static bool ParseOptions(int argc, char* argv[], DecodeHints& hints, bool& oneLine, bool& bytesOnly,
-						 std::vector<std::string>& filePaths, std::string& outPath)
+static bool ParseOptions(int argc, char *argv[], DecodeHints &hints, bool &oneLine, bool &bytesOnly,
+						 std::vector<std::string> &filePaths, std::string &outPath)
 {
-	//hints.setTryDenoise(true);
-
-	for (int i = 1; i < argc; ++i) {
-		auto is = [&](const char* str) { return strncmp(argv[i], str, strlen(argv[i])) == 0; };
-		if (is("-fast")) {
+	for (int i = 1; i < argc; ++i)
+	{
+		auto is = [&](const char *str)
+		{ return strncmp(argv[i], str, strlen(argv[i])) == 0; };
+		if (is("-fast"))
+		{
 			hints.setTryHarder(false);
-			//hints.setTryDenoise(false);
-		} else if (is("-norotate")) {
+		}
+		else if (is("-norotate"))
+		{
 			hints.setTryRotate(false);
-		} else if (is("-noinvert")) {
+		}
+		else if (is("-noinvert"))
+		{
 			hints.setTryInvert(false);
-		} else if (is("-noscale")) {
+		}
+		else if (is("-noscale"))
+		{
 			hints.setTryDownscale(false);
-		} else if (is("-ispure")) {
+		}
+		else if (is("-ispure"))
+		{
 			hints.setIsPure(true);
 			hints.setBinarizer(Binarizer::FixedThreshold);
-		} else if (is("-errors")) {
+		}
+		else if (is("-errors"))
+		{
 			hints.setReturnErrors(true);
-		} else if (is("-format")) {
+		}
+		else if (is("-format"))
+		{
 			if (++i == argc)
 				return false;
-			try {
+			try
+			{
 				hints.setFormats(BarcodeFormatsFromString(argv[i]));
-			} catch (const std::exception& e) {
+			}
+			catch (const std::exception &e)
+			{
 				std::cerr << e.what() << "\n";
 				return false;
 			}
-		} else if (is("-mode")) {
+		}
+		else if (is("-mode"))
+		{
 			if (++i == argc)
 				return false;
 			else if (is("plain"))
@@ -94,21 +113,33 @@ static bool ParseOptions(int argc, char* argv[], DecodeHints& hints, bool& oneLi
 				hints.setTextMode(TextMode::Escaped);
 			else
 				return false;
-		} else if (is("-1")) {
+		}
+		else if (is("-1"))
+		{
 			oneLine = true;
-		} else if (is("-bytes")) {
+		}
+		else if (is("-bytes"))
+		{
 			bytesOnly = true;
-		} else if (is("-pngout")) {
+		}
+		else if (is("-pngout"))
+		{
 			if (++i == argc)
 				return false;
 			outPath = argv[i];
-		} else if (is("-help") || is("--help")) {
+		}
+		else if (is("-help") || is("--help"))
+		{
 			PrintUsage(argv[0]);
 			exit(0);
-		} else if (is("-version") || is("--version")) {
-			std::cout << "ZXingReader " << ZXING_VERSION_MINOR << "\n";
+		}
+		else if (is("-version") || is("--version"))
+		{
+			std::cout << "ZXingReader " << ZXING_VERSION_MAJOR << "\n";
 			exit(0);
-		} else {
+		}
+		else
+		{
 			filePaths.push_back(argv[i]);
 		}
 	}
@@ -116,21 +147,22 @@ static bool ParseOptions(int argc, char* argv[], DecodeHints& hints, bool& oneLi
 	return !filePaths.empty();
 }
 
-std::ostream& operator<<(std::ostream& os, const Position& points)
+std::ostream &operator<<(std::ostream &os, const Position &points)
 {
-	for (const auto& p : points)
+	for (const auto &p : points)
 		os << p.x << "x" << p.y << " ";
 	return os;
 }
 
-void drawLine(const ImageView& iv, PointI a, PointI b, bool error)
+void drawLine(const ImageView &iv, PointI a, PointI b, bool error)
 {
 	int steps = maxAbsComponent(b - a);
 	PointF dir = bresenhamDirection(PointF(b - a));
 	int R = RedIndex(iv.format()), G = GreenIndex(iv.format()), B = BlueIndex(iv.format());
-	for (int i = 0; i < steps; ++i) {
+	for (int i = 0; i < steps; ++i)
+	{
 		auto p = PointI(centered(a + i * dir));
-		auto* dst = const_cast<uint8_t*>(iv.data(p.x, p.y));
+		auto *dst = const_cast<uint8_t *>(iv.data(p.x, p.y));
 		if (dst < iv.data(0, 0) || dst > iv.data(iv.width() - 1, iv.height() - 1))
 			continue;
 		dst[R] = error ? 0xff : 0;
@@ -139,13 +171,13 @@ void drawLine(const ImageView& iv, PointI a, PointI b, bool error)
 	}
 }
 
-void drawRect(const ImageView& image, const Position& pos, bool error)
+void drawRect(const ImageView &image, const Position &pos, bool error)
 {
 	for (int i = 0; i < 4; ++i)
 		drawLine(image, pos[i], pos[(i + 1) % 4], error);
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	DecodeHints hints;
 	std::vector<std::string> filePaths;
@@ -158,18 +190,20 @@ int main(int argc, char* argv[])
 	hints.setTextMode(TextMode::HRI);
 	hints.setEanAddOnSymbol(EanAddOnSymbol::Read);
 
-	if (!ParseOptions(argc, argv, hints, oneLine, bytesOnly, filePaths, outPath)) {
+	if (!ParseOptions(argc, argv, hints, oneLine, bytesOnly, filePaths, outPath))
+	{
 		PrintUsage(argv[0]);
 		return -1;
 	}
 
-
 	std::cout.setf(std::ios::boolalpha);
 
-	for (const auto& filePath : filePaths) {
+	for (const auto &filePath : filePaths)
+	{
 		int width, height, channels;
-		std::unique_ptr<stbi_uc, void(*)(void*)> buffer(stbi_load(filePath.c_str(), &width, &height, &channels, 3), stbi_image_free);
-		if (buffer == nullptr) {
+		std::unique_ptr<stbi_uc, void (*)(void *)> buffer(stbi_load(filePath.c_str(), &width, &height, &channels, 3), stbi_image_free);
+		if (buffer == nullptr)
+		{
 			std::cerr << "Failed to read image: " << filePath << "\n";
 			return -1;
 		}
@@ -182,25 +216,29 @@ int main(int argc, char* argv[])
 			results.emplace_back();
 
 		allResults.insert(allResults.end(), results.begin(), results.end());
-		if (filePath == filePaths.back()) {
+		if (filePath == filePaths.back())
+		{
 			auto merged = MergeStructuredAppendSequences(allResults);
 			// report all merged sequences as part of the last file to make the logic not overly complicated here
 			results.insert(results.end(), std::make_move_iterator(merged.begin()), std::make_move_iterator(merged.end()));
 		}
 
-		for (auto&& result : results) {
+		for (auto &&result : results)
+		{
 
 			if (!outPath.empty())
 				drawRect(image, result.position(), bool(result.error()));
 
 			ret |= static_cast<int>(result.error().type());
 
-			if (bytesOnly) {
-				std::cout.write(reinterpret_cast<const char*>(result.bytes().data()), result.bytes().size());
+			if (bytesOnly)
+			{
+				std::cout.write(reinterpret_cast<const char *>(result.bytes().data()), result.bytes().size());
 				continue;
 			}
 
-			if (oneLine) {
+			if (oneLine)
+			{
 				std::cout << filePath << " " << ToString(result.format());
 				if (result.isValid())
 					std::cout << " \"" << result.text(TextMode::Escaped) << "\"";
@@ -210,7 +248,8 @@ int main(int argc, char* argv[])
 				continue;
 			}
 
-			if (filePaths.size() > 1 || results.size() > 1) {
+			if (filePaths.size() > 1 || results.size() > 1)
+			{
 				static bool firstFile = true;
 				if (!firstFile)
 					std::cout << "\n";
@@ -219,7 +258,8 @@ int main(int argc, char* argv[])
 				firstFile = false;
 			}
 
-			if (result.format() == BarcodeFormat::None) {
+			if (result.format() == BarcodeFormat::None)
+			{
 				std::cout << "No barcode found\n";
 				continue;
 			}
@@ -235,7 +275,8 @@ int main(int argc, char* argv[])
 					  << "IsMirrored: " << result.isMirrored() << "\n"
 					  << "IsInverted: " << result.isInverted() << "\n";
 
-			auto printOptional = [](const char* key, const std::string& v) {
+			auto printOptional = [](const char *key, const std::string &v)
+			{
 				if (!v.empty())
 					std::cout << key << v << "\n";
 			};
@@ -248,12 +289,15 @@ int main(int argc, char* argv[])
 				std::cout << "Lines:      " << result.lineCount() << "\n";
 
 			if ((BarcodeFormat::EAN13 | BarcodeFormat::EAN8 | BarcodeFormat::UPCA | BarcodeFormat::UPCE)
-					.testFlag(result.format())) {
+					.testFlag(result.format()))
+			{
 				printOptional("Country:    ", GTIN::LookupCountryIdentifier(result.text(), result.format()));
 				printOptional("Add-On:     ", GTIN::EanAddOn(result));
 				printOptional("Price:      ", GTIN::Price(GTIN::EanAddOn(result)));
 				printOptional("Issue #:    ", GTIN::IssueNr(GTIN::EanAddOn(result)));
-			} else if (result.format() == BarcodeFormat::ITF && Size(result.bytes()) == 14) {
+			}
+			else if (result.format() == BarcodeFormat::ITF && Size(result.bytes()) == 14)
+			{
 				printOptional("Country:    ", GTIN::LookupCountryIdentifier(result.text(), result.format()));
 			}
 
@@ -272,12 +316,14 @@ int main(int argc, char* argv[])
 			stbi_write_png(outPath.c_str(), image.width(), image.height(), 3, image.data(0, 0), image.rowStride());
 
 #ifdef NDEBUG
-		if (getenv("MEASURE_PERF")) {
+		if (getenv("MEASURE_PERF"))
+		{
 			auto startTime = std::chrono::high_resolution_clock::now();
 			auto duration = startTime - startTime;
 			int N = 0;
 			int blockSize = 1;
-			do {
+			do
+			{
 				for (int i = 0; i < blockSize; ++i)
 					ReadBarcodes(image, hints);
 				N += blockSize;
