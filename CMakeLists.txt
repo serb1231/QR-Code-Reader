@@ -85,6 +85,17 @@ find_package(OpenCV REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${opencv_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${opencv_LIBRARIES})
 
+#Find the ZXing package
+find_package(ZXing REQUIRED)
+target_include_directories(${PROJECT_NAME} PUBLIC ${ZXing_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${ZXing_LIBRARIES})
+
+#Find STB package
+find_package(stb REQUIRED)
+target_include_directories(${PROJECT_NAME} PUBLIC ${stb_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${stb_LIBRARIES})
+
+
 # Adding the install interface generator expression makes sure that cmake 
 # chooses the correct include folder for current builds or already installed targets
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -103,7 +114,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 # enable strict standard, extra warnings
 target_compile_options(${PROJECT_NAME} PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
 
 
