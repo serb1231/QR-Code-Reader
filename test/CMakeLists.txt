@@ -13,6 +13,7 @@ list(APPEND MY_TEST_NAMES "ClassHelloWorld")
 list(APPEND MY_TEST_NAMES "ClassDecoder")
 list(APPEND MY_TEST_NAMES "ClassZXDecoder")
 list(APPEND MY_TEST_NAMES "ClassZXEncoder")
+list(APPEND MY_TEST_NAMES "ZXing_Encoder_Example")
 
 foreach(MY_TEST_NAME ${MY_TEST_NAMES})
   # build test executable and link project library

@@ -14,15 +14,15 @@
 
 using namespace ZXing;
 
-// std::string getFileType(std::string file_name)
-// {
-//     char* file_type=".";
-//     int file_type_start_pos;
+std::string getFileType(std::string file_name)
+{
+    char* file_type=".";
+    int file_type_start_pos;
 
-//     file_type_start_pos = file_name.rfind(".");
-//     file_name.copy(file_type,4, file_type_start_pos);
-//     return file_type;
-// }
+    file_type_start_pos = file_name.rfind(".");
+    file_name.copy(file_type,4, file_type_start_pos);
+    return file_type;
+}
 
 int ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std::string path, int size, int margin)
 {
@@ -71,8 +71,7 @@ int ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std:
         margin = 0;
     }
 
-    std::cout << "requirements checked..."
-              << "\n";
+    std::cout << "requirements checked..." << "\n";
 
     BarcodeFormat code_type = BarcodeFormatFromString("QRCode");
     CharacterSet encoding = CharacterSetFromString("UTF8");
@@ -88,14 +87,14 @@ int ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std:
 
     bool success = false;
 
-    // if (file_name.find(".jpg") != 0)
-    // {
-    //     success = stbi_write_jpg(path.append(file_name).c_str(), bitmap.width(), bitmap.height(), 1, bitmap.data(), 0);
-    // }
-    // else if (file_name.find(".png") != 0)
-    // {
-    //     success = stbi_write_png(path.append(file_name).c_str(), bitmap.width(), bitmap.height(), 1, bitmap.data(), 0);
-    // }
+    if (file_name.find(".jpg") != 0)
+    {
+        success = stbi_write_jpg(path.append(file_name).c_str(), bitmap.width(), bitmap.height(), 1, bitmap.data(), 0);
+    }
+    else if (file_name.find(".png") != 0)
+    {
+        success = stbi_write_png(path.append(file_name).c_str(), bitmap.width(), bitmap.height(), 1, bitmap.data(), 0);
+    }
 
     if (!success)
     {
