@@ -6,3 +6,6 @@ cmake_paths
 [requires]
 pybind11/2.9.1
 doxygen/1.9.2
+opencv/4.5.5
+zxing-cpp/2.0.0
+stb/cci.20220909
