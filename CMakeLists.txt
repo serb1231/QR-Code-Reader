@@ -5,7 +5,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
   cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-project("ViennaExample" LANGUAGES CXX VERSION 0.0.1)
+project("QRCoder" LANGUAGES CXX VERSION 0.0.1)
 
 ### Require out-of-source builds
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
