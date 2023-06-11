@@ -63,6 +63,12 @@
         "unordered_set": "cpp",
         "optional": "cpp",
         "fstream": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "bitset": "cpp",
+        "forward_list": "cpp",
+        "ranges": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp"
     }
 }
