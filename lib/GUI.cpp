@@ -2,8 +2,29 @@
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
 #include <iostream>
+#include <GtkFileExplorer.hpp>
 
 #define STD_PADDING 5
+
+void open_image(const std::string& path){
+
+        // Displaying Image
+        cv::Mat image;
+        image = cv::imread(path, 1);
+
+        if (!image.data)
+        {
+            printf("Seleced File was not an image \n");
+        
+        }
+
+        cv::namedWindow("Selected Image:", cv::WINDOW_AUTOSIZE);
+        cv::imshow("Selected Image:", image);
+        cv::waitKey(0);
+
+}
+//test
+
 
 // Button click event handler
 void button_clicked(GtkWidget *widget, gpointer user_data)
@@ -31,11 +52,20 @@ void open_filebrowser(GtkWidget *widget, gpointer user_data) {
         NULL
     );
 
+    GtkFileExplorer *data = static_cast<GtkFileExplorer *>(user_data);
+
+
     gint result = gtk_dialog_run(GTK_DIALOG(dialog));
     if (result == GTK_RESPONSE_ACCEPT) {
         char* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        g_print("Selected file: %s\n", filename);
-        g_free(filename);
+
+        open_image(filename);
+
+        g_print("Selected file:%s\n",filename);
+
+        
+    }else{
+        g_print("File selection canceled by the user\n");
     }
 
     gtk_widget_destroy(dialog);
@@ -46,6 +76,8 @@ int gui_handler(int argc, char** argv) {
 
 // Initialize GTK
     gtk_init(&argc, &argv);
+    std::string selectedFile;
+    GtkFileExplorer explorer = GtkFileExplorer();
 
     // Create a GTK window
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -72,20 +104,24 @@ int gui_handler(int argc, char** argv) {
     g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), entry);
 
     // Connect button click event handlers
-    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), NULL);
+    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), &explorer);
     g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), NULL);
 
     // Pack buttons into the vertical box
     gtk_table_attach(GTK_TABLE(table), button1, 1, 2, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     gtk_table_attach(GTK_TABLE(table), button2, 3, 5, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     gtk_table_attach(GTK_TABLE(table), button3, 5, 7, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
-
-    // Show all widgets
+ 
+ // Show all widgets
     gtk_widget_show_all(window);
+
+
 
     // Start the GTK main loop
     gtk_main();
 
+
     return 0;
+
 
 }
