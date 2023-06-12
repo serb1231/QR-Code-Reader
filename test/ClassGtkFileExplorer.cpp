@@ -3,13 +3,12 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <stdio.h>
-#include <GtkFileExplorer.hpp>
+#include <QRData.hpp>
 
 void on_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 {
     std::string selectedFile;
-    GtkFileExplorer *data = static_cast<GtkFileExplorer *>(user_data);
-    GtkFileExplorer real_data = *data;
+    QRData *data = static_cast<QRData *>(user_data);
     if (response_id == GTK_RESPONSE_ACCEPT)
     {
         GtkFileChooser *filechooser = GTK_FILE_CHOOSER(dialog);
@@ -17,7 +16,7 @@ void on_dialog_response(GtkDialog *dialog, gint response_id, gpointer user_data)
 
         std::cout << "Selected file: " << selectedFile << std::endl;
 
-        data->setFile(selectedFile);
+        data->set_input_filepath(selectedFile);
     }
     else
     {
@@ -45,7 +44,7 @@ int main()
         GTK_RESPONSE_ACCEPT,
         NULL);
 
-    GtkFileExplorer explorer = GtkFileExplorer();
+    QRData explorer = QRData();
     // Connect the response signal to the callback function
     g_signal_connect(filechooserdialog, "response", G_CALLBACK(on_dialog_response), &explorer);
 
@@ -56,7 +55,7 @@ int main()
     gtk_main();
 
     // Getting Filename obtained in on_dialog_response
-    selectedFile = explorer.getFile();
+    selectedFile = explorer.get_input_filepath();
 
     // Displaying Image
     cv::Mat image;

@@ -2,8 +2,9 @@
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
 #include <iostream>
-#include <GtkFileExplorer.hpp>
+#include <QRData.hpp>
 #include <Decoder.hpp>
+#include <ImageFinder.hpp>
 
 #define STD_PADDING 5
 
@@ -16,6 +17,7 @@ void open_image(const std::string& path){
         if (!image.data)
         {
             printf("Seleced File was not an image \n");
+            return;
         
         }
 
@@ -30,11 +32,11 @@ void open_image(const std::string& path){
 void button_clicked(GtkWidget *widget, gpointer user_data)
 {
     g_print("Button clicked!\n");
-    GtkFileExplorer *data = static_cast<GtkFileExplorer *>(user_data);
+    QRData *data = static_cast<QRData *>(user_data);
 
     auto dec = Decoder();
 
-    cv::Mat image = cv::imread(data->getFile());
+    cv::Mat image = cv::imread(data->get_input_filepath());
     int err = dec.decode(image);
 
 
@@ -42,12 +44,28 @@ void button_clicked(GtkWidget *widget, gpointer user_data)
 
 // Enter Key event handler
 static void entry_activate_callback(GtkEntry* entry, gpointer user_data) {
-        std::cout << gtk_entry_get_text(GTK_ENTRY(entry)) << std::endl;
+        QRData *data = static_cast<QRData *>(user_data);
+        data->set_input_filepath(gtk_entry_get_text(GTK_ENTRY(entry)));
+
 }
 
 void entry_button_clicked(GtkWidget* widget, GtkEntry* entry, gpointer user_data) {
     g_print("You entered: ");
-    std::cout << gtk_entry_get_text(GTK_ENTRY(entry)) << std::endl;
+
+    std::string input = gtk_entry_get_text(GTK_ENTRY(entry));
+    std::cout << input << std::endl;
+    
+    auto finder= ImageFinder();
+
+    if(finder.CheckPathforImage(input)){
+        open_image(input);
+    }else{
+        g_print("Filepath does not lead to image. Please try again!\n");
+    }
+    
+
+
+    
 }
 
 void open_filebrowser(GtkWidget *widget, gpointer user_data) {
@@ -60,7 +78,7 @@ void open_filebrowser(GtkWidget *widget, gpointer user_data) {
         NULL
     );
 
-    GtkFileExplorer *data = static_cast<GtkFileExplorer *>(user_data);
+    QRData *data = static_cast<QRData *>(user_data);
 
 
     gint result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -71,7 +89,7 @@ void open_filebrowser(GtkWidget *widget, gpointer user_data) {
 
         g_print("Selected file:%s\n",filename);
 
-        data->setFile(filename);
+        data->set_input_filepath(filename);
 
     }else{
         g_print("File selection canceled by the user\n");
@@ -85,7 +103,7 @@ int gui_handler(int argc, char** argv) {
 
 // Initialize GTK
     gtk_init(&argc, &argv);
-    GtkFileExplorer explorer = GtkFileExplorer();
+    QRData qrData = QRData();
 
 
     // Create a GTK window
@@ -105,7 +123,7 @@ int gui_handler(int argc, char** argv) {
 
 
     // Create three buttons
-    GtkWidget *button1 = gtk_button_new_with_label("accept");
+    GtkWidget *button1 = gtk_button_new_with_label("Use input path");
     GtkWidget *button2 = gtk_button_new_with_label("browse");
     GtkWidget *button3 = gtk_button_new_with_label("Decode QR-Image");
 
@@ -113,8 +131,10 @@ int gui_handler(int argc, char** argv) {
     g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), entry);
 
     // Connect button click event handlers
-    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), &explorer);
-    g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), &explorer);
+    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), &qrData);
+    g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), &qrData);
+
+    g_signal_connect(entry, "changed", G_CALLBACK(entry_activate_callback), &qrData);
 
     // Pack buttons into the vertical box
     gtk_table_attach(GTK_TABLE(table), button1, 1, 2, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
