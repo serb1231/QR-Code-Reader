@@ -23,7 +23,6 @@ void open_image(const std::string& path){
         cv::waitKey(0);
 
 }
-//test
 
 
 // Button click event handler
@@ -63,7 +62,6 @@ void open_filebrowser(GtkWidget *widget, gpointer user_data) {
 
         g_print("Selected file:%s\n",filename);
 
-        
     }else{
         g_print("File selection canceled by the user\n");
     }
@@ -76,8 +74,6 @@ int gui_handler(int argc, char** argv) {
 
 // Initialize GTK
     gtk_init(&argc, &argv);
-    std::string selectedFile;
-    GtkFileExplorer explorer = GtkFileExplorer();
 
     // Create a GTK window
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -104,7 +100,7 @@ int gui_handler(int argc, char** argv) {
     g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), entry);
 
     // Connect button click event handlers
-    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), &explorer);
+    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), NULL;
     g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), NULL);
 
     // Pack buttons into the vertical box
@@ -112,10 +108,8 @@ int gui_handler(int argc, char** argv) {
     gtk_table_attach(GTK_TABLE(table), button2, 3, 5, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     gtk_table_attach(GTK_TABLE(table), button3, 5, 7, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
  
- // Show all widgets
+    // Show all widgets
     gtk_widget_show_all(window);
-
-
 
     // Start the GTK main loop
     gtk_main();
