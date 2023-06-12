@@ -11,7 +11,9 @@ add_custom_target(${TEST_BUILD_TARGET} ALL)
 set(MY_TEST_NAMES "")
 list(APPEND MY_TEST_NAMES "ClassDecoder")
 list(APPEND MY_TEST_NAMES "ClassZXEncoder")
+list(APPEND MY_TEST_NAMES "UI_test")
 list(APPEND MY_TEST_NAMES "ClassGtkFileExplorer")
+
 
 
 foreach(MY_TEST_NAME ${MY_TEST_NAMES})
