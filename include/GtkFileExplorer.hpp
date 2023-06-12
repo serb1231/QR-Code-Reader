@@ -3,12 +3,12 @@
 struct GtkFileExplorer{
 
     private:
-        static std::string file;
+        std::string file;
         
     public:
-        static void setFile(const std::string& filename);
-        static std::string getFile();
+        void setFile(const std::string& filename);
+        std::string getFile();
 };
 
 //static variable need to be initialised
-std::string GtkFileExplorer::file = "";
+//std::string GtkFileExplorer::file = "";
