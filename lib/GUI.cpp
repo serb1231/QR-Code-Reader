@@ -100,7 +100,7 @@ int gui_handler(int argc, char** argv) {
     g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), entry);
 
     // Connect button click event handlers
-    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), NULL;
+    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), NULL);
     g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), NULL);
 
     // Pack buttons into the vertical box
