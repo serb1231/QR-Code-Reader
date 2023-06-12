@@ -49,6 +49,7 @@ int Decoder::decode(cv::Mat QRimage){
 
     } else {
         std::cout << "No QR code detected!" << std::endl;
+        return -1;
     }
 
     /// Check if image is still in size range
