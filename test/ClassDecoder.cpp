@@ -5,7 +5,7 @@ int main(){
 
     auto dec = Decoder();
 
-    cv::Mat image = cv::imread("../../QR_Code_Foto_Technopedia.jpg");
+    cv::Mat image = cv::imread("../../../../U.jpg");
     int err = dec.decode(image);
 
     return err;

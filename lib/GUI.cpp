@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <GtkFileExplorer.hpp>
+#include <Decoder.hpp>
 
 #define STD_PADDING 5
 
@@ -29,6 +30,14 @@ void open_image(const std::string& path){
 void button_clicked(GtkWidget *widget, gpointer user_data)
 {
     g_print("Button clicked!\n");
+    GtkFileExplorer *data = static_cast<GtkFileExplorer *>(user_data);
+
+    auto dec = Decoder();
+
+    cv::Mat image = cv::imread(data->getFile());
+    int err = dec.decode(image);
+
+
 }
 
 // Enter Key event handler
@@ -62,6 +71,8 @@ void open_filebrowser(GtkWidget *widget, gpointer user_data) {
 
         g_print("Selected file:%s\n",filename);
 
+        data->setFile(filename);
+
     }else{
         g_print("File selection canceled by the user\n");
     }
@@ -74,6 +85,8 @@ int gui_handler(int argc, char** argv) {
 
 // Initialize GTK
     gtk_init(&argc, &argv);
+    GtkFileExplorer explorer = GtkFileExplorer();
+
 
     // Create a GTK window
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -94,14 +107,14 @@ int gui_handler(int argc, char** argv) {
     // Create three buttons
     GtkWidget *button1 = gtk_button_new_with_label("accept");
     GtkWidget *button2 = gtk_button_new_with_label("browse");
-    GtkWidget *button3 = gtk_button_new_with_label("Button 3");
+    GtkWidget *button3 = gtk_button_new_with_label("Decode QR-Image");
 
     // Connect the "button1" signal to the signal handler
     g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), entry);
 
     // Connect button click event handlers
-    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), NULL);
-    g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), NULL);
+    g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), &explorer);
+    g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), &explorer);
 
     // Pack buttons into the vertical box
     gtk_table_attach(GTK_TABLE(table), button1, 1, 2, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
