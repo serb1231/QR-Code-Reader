@@ -36,7 +36,7 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
     auto dec = Decoder();
 
     cv::Mat image = cv::imread(data->get_input_filepath());
-    std::string output = "\n" + dec.decode(image);
+    std::string output =  "\n" + dec.decode(image);
     if (output != "No QR code detected!")
     {
         data->set_decoded_text(output);
@@ -52,6 +52,10 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
     // Insert the new text into the buffer
     const gchar *new_text = output.c_str();
     gtk_text_buffer_insert_at_cursor(buffer, new_text, -1);
+
+    // Scroll the textview to the end
+    GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
+    gtk_text_view_scroll_to_mark(decoded_text_textview, mark, 0.0, TRUE, 0.0, 1.0);
 }
 
 // Button click event handler
@@ -155,7 +159,11 @@ int gui_handler(int argc, char **argv)
     // Create a GtkTextView widget to display the decoded text
     GtkWidget *decoded_text_textview = gtk_text_view_new();
     gtk_text_view_set_editable(GTK_TEXT_VIEW(decoded_text_textview), FALSE);
-    gtk_table_attach(GTK_TABLE(table), decoded_text_textview, 2, 15, 6, 7, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    GtkWidget* scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_container_add(GTK_CONTAINER(scrolled_window), decoded_text_textview);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_table_attach(GTK_TABLE(table), scrolled_window, 2, 15, 6, 7, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create a second entry buffer for manual text input for the encoder
     GtkEntryBuffer *input_text_encoder_eBuffer = gtk_entry_buffer_new("input your text here", -1);
