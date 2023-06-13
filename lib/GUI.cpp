@@ -38,6 +38,9 @@ void button_clicked(GtkWidget *widget, gpointer user_data)
 
     cv::Mat image = cv::imread(data->get_input_filepath());
     std::string output = dec.decode(image);
+    if(output != "No QR code detected!"){
+        data->set_decoded_text(output);
+    }
     std::cout <<output << std::endl;
 
 }
