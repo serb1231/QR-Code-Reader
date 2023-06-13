@@ -36,7 +36,7 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
     auto dec = Decoder();
 
     cv::Mat image = cv::imread(data->get_input_filepath());
-    std::string output = dec.decode(image);
+    std::string output = "\n" + dec.decode(image);
     if (output != "No QR code detected!")
     {
         data->set_decoded_text(output);
@@ -48,9 +48,6 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
 
     // Get the GtkTextBuffer of the decoded_text_textview
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(decoded_text_textview);
-
-    // Clear the existing text in the buffer
-    gtk_text_buffer_set_text(buffer, "", -1);
 
     // Insert the new text into the buffer
     const gchar *new_text = output.c_str();
@@ -157,6 +154,7 @@ int gui_handler(int argc, char **argv)
 
     // Create a GtkTextView widget to display the decoded text
     GtkWidget *decoded_text_textview = gtk_text_view_new();
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(decoded_text_textview), FALSE);
     gtk_table_attach(GTK_TABLE(table), decoded_text_textview, 2, 15, 6, 7, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create a second entry buffer for manual text input for the encoder
