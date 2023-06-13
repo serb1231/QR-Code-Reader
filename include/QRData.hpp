@@ -1,25 +1,29 @@
 #include <string>
 #include <gtk/gtk.h>
 
+struct QRData
+{
 
-struct QRData{
+private:
+    std::string input_filepath;
+    std::string decoded_text;
+    GtkWidget *input_filepath_textfield;
+    GtkWidget *output_decoder_textfield;
+    GtkWidget *image_widget;
 
-    private:
-        std::string input_filepath;
-        std::string decoded_text;
-        GtkWidget* entry;
-        GtkWidget* textfield;
-        
-    public:
-        void set_input_filepath(const std::string& filename);
-        std::string get_input_filepath();
+public:
+    void set_input_filepath(const std::string &new_input_filepath);
+    std::string get_input_filepath();
 
-        void set_decoded_text(const std::string& text);
-        std::string get_decoded_text();
+    void set_decoded_text(const std::string &new_decoded_text);
+    std::string get_decoded_text();
 
-        void set_entry(GtkWidget* NewEntry);
-        GtkWidget* get_entry();
+    void set_input_filepath_textfield(GtkWidget *new_input_filepath_textfield);
+    GtkWidget *get_input_filepath_textfield();
 
-        void set_textfield(GtkWidget* NewTextfield);
-        GtkWidget* get_textfield();
+    void set_output_decoder_textfield(GtkWidget *new_output_decoder_textfield);
+    GtkWidget *get_output_decoder_textfield();
+
+    void set_image_widget(GtkWidget *new_image_widget);
+    GtkWidget *get_image_widget();
 };

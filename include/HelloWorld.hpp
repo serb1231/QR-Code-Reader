@@ -7,7 +7,8 @@
 /**
    This Class prints "HelloWorld!"
  **/
-struct HelloWorld {
+struct HelloWorld
+{
   std::string prefix;
   /// Constructor of HelloWorld
   HelloWorld();
