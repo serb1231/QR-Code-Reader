@@ -41,8 +41,7 @@ std::string Decoder::decode(cv::Mat QRimage){
         croppedImage = QRimage(roi);
 
     } else {
-        std::cout << "No QR code detected!" << std::endl;
-        return "No QR-Code";
+        return "No QR code detected!";
     }
 
     /// Check if image is still in size range
