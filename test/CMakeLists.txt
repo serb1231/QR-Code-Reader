@@ -13,6 +13,7 @@ list(APPEND MY_TEST_NAMES "ClassDecoder")
 #list(APPEND MY_TEST_NAMES "ClassZXEncoder")
 list(APPEND MY_TEST_NAMES "UI_test")
 #list(APPEND MY_TEST_NAMES "ClassGtkFileExplorer")
+list(APPEND MY_TEST_NAMES "ClassOutput")
 
 
 
