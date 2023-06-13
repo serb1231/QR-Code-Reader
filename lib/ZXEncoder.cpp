@@ -17,11 +17,11 @@ using namespace ZXing;
 
 std::string getFileType(std::string file_name)
 {
-    char *file_type = ".";
+    char* file_type=".";
     int file_type_start_pos;
 
     file_type_start_pos = file_name.rfind(".");
-    file_name.copy(file_type, 4, file_type_start_pos);
+    file_name.copy(file_type,4, file_type_start_pos);
     return file_type;
 }
 
@@ -58,10 +58,6 @@ int ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std:
         std::cout << "INFO: Passed path is empty. The image will be written in the default path." << std::endl;
         path = "./";
     }
-    if (path[path.length()] != '/')
-    {
-        path = path.append("/");
-    }
     if (size < 11)
     {
         std::cout << "ERROR: Passed size is too small. The size should be >10." << std::endl;
@@ -76,8 +72,7 @@ int ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std:
         margin = 0;
     }
 
-    std::cout << "requirements checked..."
-              << "\n";
+    std::cout << "requirements checked..." << "\n";
 
     BarcodeFormat code_type = BarcodeFormatFromString("QRCode");
     CharacterSet encoding = CharacterSetFromString("UTF8");

@@ -6,8 +6,9 @@
 
 /// This class contains all the functionality to actually decode the QR-Code
 
-class Decoder
-{
-public:
+class Decoder{
+    public:
+
     std::string decode(cv::Mat QRimage);
+
 };

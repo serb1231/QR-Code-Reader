@@ -1,5 +1,6 @@
 #include "QRData.hpp"
 
+
 void QRData::set_input_filepath(const std::string &filename)
 {
     QRData::input_filepath = filename;
@@ -9,6 +10,7 @@ std::string QRData::get_input_filepath()
 {
     return QRData::input_filepath;
 }
+
 
 void QRData::set_decoded_text(const std::string &text)
 {
@@ -20,24 +22,14 @@ std::string QRData::get_decoded_text()
     return QRData::decoded_text;
 }
 
-void QRData::set_input_filepath_textfield(GtkWidget *NewEntry)
+void QRData::set_file_entry(GtkWidget* NewEntry)
 {
-    QRData::input_filepath_textfield = NewEntry;
+    QRData::file_entry = NewEntry;
 }
 
-GtkWidget *QRData::get_input_filepath_textfield()
+GtkWidget* QRData::get_file_entry()
 {
-    return QRData::input_filepath_textfield;
-}
-
-void QRData::set_output_decoder_textfield(GtkWidget *NewTextfield)
-{
-    QRData::entry = NewEntry;
-}
-
-GtkWidget* QRData::get_entry()
-{
-    return QRData::entry;
+    return QRData::file_entry;
 }
 
 void QRData::set_textfield(GtkWidget* NewTextfield)
@@ -47,7 +39,7 @@ void QRData::set_textfield(GtkWidget* NewTextfield)
 
 GtkWidget* QRData::get_textfield()
 {
-    return QRData::image_widget;
+    return QRData::textfield;
 }
 
 void QRData::set_text_entry(GtkWidget* NewEntry)

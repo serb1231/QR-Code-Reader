@@ -10,13 +10,12 @@
 /**
    This Class prints checks if a path is viable and opens the picture
  **/
-struct ImageFinder
-{
+struct ImageFinder {
   std::string path;
   cv::Mat image;
   /// Constructor of imagefinder
   ImageFinder();
-  /// Input path
+  ///Input path
   void Setpath(std::string path);
   /// Input path for user
   bool CheckPathforImage(std::string InputPath);

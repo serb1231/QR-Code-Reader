@@ -1,12 +1,10 @@
 #include <Decoder.hpp>
 #include <opencv2/opencv.hpp>
 
-std::string Decoder::decode(cv::Mat QRimage)
-{
+std::string Decoder::decode(cv::Mat QRimage){
 
     /// Check if the image was successfully loaded
-    if (QRimage.empty())
-    {
+    if (QRimage.empty()) {
         std::cout << "Failed to load the image." << std::endl;
         return "No Image";
     }
@@ -16,8 +14,7 @@ std::string Decoder::decode(cv::Mat QRimage)
     int height = QRimage.rows;
 
     /// Too small images can't be decoded
-    if (width < 199 || height < 199)
-    {
+    if(width < 199 || height < 199){
         std::cout << "Image too small, please upload a bigger image." << std::endl;
         return "Image too small";
     }
@@ -28,14 +25,13 @@ std::string Decoder::decode(cv::Mat QRimage)
 
     /// Define a vector to store the output corner points of the detected Region
     std::vector<cv::Point> points;
-
+    
     /// Detect the QR code and obtain the Region corner points
     bool detectionResult = qrDetector.detect(QRimage, points);
 
     cv::Mat croppedImage;
 
-    if (detectionResult)
-    {
+    if (detectionResult) {
         /// Draw the quadrangle on the image
         cv::polylines(QRimage, points, true, cv::Scalar(0, 255, 0), 2);
 
@@ -43,9 +39,8 @@ std::string Decoder::decode(cv::Mat QRimage)
 
         /// Crop the image using the ROI
         croppedImage = QRimage(roi);
-    }
-    else
-    {
+
+    } else {
         return "No QR code detected!";
     }
 
@@ -54,7 +49,7 @@ std::string Decoder::decode(cv::Mat QRimage)
     height = croppedImage.rows;
 
     /// Image too big, resize it to ~500x500
-    while (width > 500 || height > 500)
+    while(width > 500 || height > 500)
     {
         width *= 0.9;
         height *= 0.9;
@@ -79,4 +74,5 @@ std::string Decoder::decode(cv::Mat QRimage)
         std::cout << "QR code not found or decoding failed" << std::endl;
         return "No QR-Code";
     }
+
 }
