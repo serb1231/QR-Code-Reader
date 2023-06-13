@@ -149,7 +149,7 @@ int gui_handler(int argc, char **argv)
     gtk_container_add(GTK_CONTAINER(window), table);
 
     // Create an entry buffer for manual path and file input for the decoder
-    GtkEntryBuffer *input_path_decoder_eBuffer = gtk_entry_buffer_new("filepath", -1);
+    GtkEntryBuffer *input_path_decoder_eBuffer = gtk_entry_buffer_new("filepath to image", -1);
     // Create a text input field
     GtkWidget *input_filepath_decoder_entry = gtk_entry_new_with_buffer(input_path_decoder_eBuffer);
     gtk_entry_set_visibility(GTK_ENTRY(input_filepath_decoder_entry), TRUE);
@@ -160,7 +160,7 @@ int gui_handler(int argc, char **argv)
     gtk_table_attach(GTK_TABLE(table), decoded_text_textview, 2, 15, 6, 7, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create a second entry buffer for manual text input for the encoder
-    GtkEntryBuffer *input_text_encoder_eBuffer = gtk_entry_buffer_new("text", -1);
+    GtkEntryBuffer *input_text_encoder_eBuffer = gtk_entry_buffer_new("input your text here", -1);
     // Create a text input field
     GtkWidget *input_text_encoder_entry = gtk_entry_new_with_buffer(input_text_encoder_eBuffer);
     gtk_entry_set_visibility(GTK_ENTRY(input_text_encoder_entry), TRUE);
@@ -174,11 +174,11 @@ int gui_handler(int argc, char **argv)
     gtk_table_attach(GTK_TABLE(table), input_filename_encoder_entry, 13, 15, 8, 9, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create an entry buffer for manual path and file input for the decoder
-    GtkEntryBuffer *input_path_encoder_eBuffer = gtk_entry_buffer_new("filepath", -1);
+    GtkEntryBuffer *input_path_encoder_eBuffer = gtk_entry_buffer_new("filepath to folder", -1);
     // Create a text input field
-    GtkWidget *input_filepath_encoder_entry = gtk_entry_new_with_buffer(input_path_decoder_eBuffer);
-    gtk_entry_set_visibility(GTK_ENTRY(input_filepath_decoder_entry), TRUE);
-    gtk_table_attach(GTK_TABLE(table), input_filepath_decoder_entry, 2, 11, 8, 9, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    GtkWidget *input_filepath_encoder_entry = gtk_entry_new_with_buffer(input_path_encoder_eBuffer);
+    gtk_entry_set_visibility(GTK_ENTRY(input_filepath_encoder_entry), TRUE);
+    gtk_table_attach(GTK_TABLE(table), input_filepath_encoder_entry, 2, 11, 8, 9, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create three buttons, attach them/place them on the table and connect the signals
     GtkWidget *path_entry_button = gtk_button_new_with_label("Open filepath");
