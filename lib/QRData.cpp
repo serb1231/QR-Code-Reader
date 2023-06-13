@@ -59,3 +59,13 @@ GtkWidget *QRData::get_filename_entry()
 {
     return QRData::filename_entry;
 }
+
+void QRData::set_message_log_textview(GtkWidget *NewMessageLogTextview)
+{
+    QRData::message_log_textview = NewMessageLogTextview;
+}
+
+GtkWidget *QRData::get_message_log_textview()
+{
+    return QRData::message_log_textview;
+}

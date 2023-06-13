@@ -11,6 +11,7 @@ private:
     GtkWidget *textfield;
     GtkWidget *input_text_encoder_entry;
     GtkWidget *filename_entry;
+    GtkWidget *message_log_textview;
 
 public:
     void set_input_filepath(const std::string &filename);
@@ -30,4 +31,7 @@ public:
 
     void set_filename_entry(GtkWidget *NewEntry);
     GtkWidget *get_filename_entry();
+
+    void set_message_log_textview(GtkWidget *NewMessageLogTextview);
+    GtkWidget *get_message_log_textview();
 };

@@ -10,7 +10,24 @@
 
 #define STD_PADDING 5
 
-void open_image(const std::string &path)
+void print_to_gui_log(std::string message, QRData *qrData)
+{
+    // Cast the data pointer to a GtkTextView pointer
+    GtkTextView *textview = GTK_TEXT_VIEW(qrData->get_message_log_textview());
+
+    // Get the GtkTextBuffer of the decoded_text_textview
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
+
+    // Insert the new text into the buffer
+    const gchar *new_text = message.c_str();
+    gtk_text_buffer_insert_at_cursor(buffer, new_text, -1);
+
+    // Scroll the textview to the end
+    GtkTextMark *mark = gtk_text_buffer_get_insert(buffer);
+    gtk_text_view_scroll_to_mark(textview, mark, 0.0, TRUE, 0.0, 1.0);
+}
+
+void open_image(const std::string &path, QRData qrData)
 {
     // Displaying Image
     cv::Mat image;
@@ -18,7 +35,9 @@ void open_image(const std::string &path)
 
     if (!image.data)
     {
-        printf("Seleced File was not an image \n");
+        g_print("Seleced File was not an image\n");
+        print_to_gui_log("Seleced File was not an image\n", &qrData);
+
         return;
     }
 
@@ -27,35 +46,20 @@ void open_image(const std::string &path)
     cv::waitKey(0);
 }
 
-// Button click event handler
 void decode_button_clicked(GtkWidget *widget, gpointer user_data)
 {
-    // g_print("Button clicked!\n");
     QRData *data = static_cast<QRData *>(user_data);
 
     auto dec = Decoder();
 
     cv::Mat image = cv::imread(data->get_input_filepath());
-    std::string output =  "\n" + dec.decode(image);
+    std::string output = "\n" + dec.decode(image);
     if (output != "No QR code detected!")
     {
         data->set_decoded_text(output);
     }
     std::cout << output << std::endl;
-
-    // Cast the data pointer to a GtkTextView pointer
-    GtkTextView *decoded_text_textview = GTK_TEXT_VIEW(data->get_output_decoder_textfield());
-
-    // Get the GtkTextBuffer of the decoded_text_textview
-    GtkTextBuffer *buffer = gtk_text_view_get_buffer(decoded_text_textview);
-
-    // Insert the new text into the buffer
-    const gchar *new_text = output.c_str();
-    gtk_text_buffer_insert_at_cursor(buffer, new_text, -1);
-
-    // Scroll the textview to the end
-    GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
-    gtk_text_view_scroll_to_mark(decoded_text_textview, mark, 0.0, TRUE, 0.0, 1.0);
+    print_to_gui_log(output + "\n", data);
 }
 
 // Button click event handler
@@ -73,7 +77,7 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
     if (err == "Image created successfully!\n")
     {
         std::string full_image_path = path_entry + input_filename_encoder_entry;
-        open_image(full_image_path);
+        open_image(full_image_path, *data);
     }
     else
     {
@@ -83,23 +87,23 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
 
 void path_entry_button_clicked(GtkWidget *widget, gpointer user_data)
 {
-    g_print("You entered: ");
-
     QRData *data = static_cast<QRData *>(user_data);
 
     std::string input = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_textfield()));
-    std::cout << input << std::endl;
+    std::cout << "Your entered: " << input << std::endl;
+    print_to_gui_log("Your entered: " + input + "\n", data);
 
     auto finder = ImageFinder();
 
     if (finder.CheckPathforImage(input))
     {
-        open_image(input);
+        open_image(input, *data);
         data->set_input_filepath(input);
     }
     else
     {
         g_print("Filepath does not lead to image. Please try again!\n");
+        print_to_gui_log("Filepath does not lead to image. Please try again!\n", data);
     }
 }
 
@@ -118,17 +122,19 @@ void explorer_button_clicked(GtkWidget *widget, gpointer user_data)
     gint result = gtk_dialog_run(GTK_DIALOG(dialog));
     if (result == GTK_RESPONSE_ACCEPT)
     {
-        char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        std::string filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
-        open_image(filename);
+        open_image(filename, *data);
 
-        g_print("Selected file:%s\n", filename);
+        g_print("Selected file: %s\n", filename.c_str());
+        print_to_gui_log("Selected file: " + filename + "\n", data);
 
         data->set_input_filepath(filename);
     }
     else
     {
         g_print("File selection canceled by the user\n");
+        print_to_gui_log("File selection canceled by the user\n", data);
     }
 
     gtk_widget_destroy(dialog);
@@ -146,7 +152,7 @@ int gui_handler(int argc, char **argv)
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     // Create a table container
-    GtkWidget *table = gtk_table_new(20, 20, false);
+    GtkWidget *table = gtk_table_new(200, 200, false);
     gtk_container_add(GTK_CONTAINER(window), table);
 
     // Create an entry buffer for manual path and file input for the decoder
@@ -159,11 +165,20 @@ int gui_handler(int argc, char **argv)
     // Create a GtkTextView widget to display the decoded text
     GtkWidget *decoded_text_textview = gtk_text_view_new();
     gtk_text_view_set_editable(GTK_TEXT_VIEW(decoded_text_textview), FALSE);
-    GtkWidget* scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_container_add(GTK_CONTAINER(scrolled_window), decoded_text_textview);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_table_attach(GTK_TABLE(table), scrolled_window, 2, 15, 6, 7, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+
+    // Create a GtkTextView widget to display various messages like errors and so on
+    GtkWidget *message_log_textview = gtk_text_view_new();
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(message_log_textview), FALSE);
+    GtkWidget *message_log_textview_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_container_add(GTK_CONTAINER(message_log_textview_scrolled_window), message_log_textview);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(message_log_textview_scrolled_window),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_table_attach(GTK_TABLE(table), message_log_textview_scrolled_window, 2, 15, 100, 207, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create a second entry buffer for manual text input for the encoder
     GtkEntryBuffer *input_text_encoder_eBuffer = gtk_entry_buffer_new("input your text here", -1);
@@ -187,7 +202,7 @@ int gui_handler(int argc, char **argv)
     gtk_table_attach(GTK_TABLE(table), input_filepath_encoder_entry, 2, 11, 8, 9, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create three buttons, attach them/place them on the table and connect the signals
-    GtkWidget *path_entry_button = gtk_button_new_with_label("Open filepath");
+    GtkWidget *path_entry_button = gtk_button_new_with_label("Open file from path");
     gtk_table_attach(GTK_TABLE(table), path_entry_button, 2, 3, 4, 5, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     g_signal_connect(path_entry_button, "clicked", G_CALLBACK(path_entry_button_clicked), &qrData);
 
@@ -208,6 +223,7 @@ int gui_handler(int argc, char **argv)
     qrData.set_output_decoder_textfield(decoded_text_textview);
     qrData.set_input_text_encoder_entry(input_text_encoder_entry);
     qrData.set_filename_entry(input_filename_encoder_entry);
+    qrData.set_message_log_textview(message_log_textview);
 
     // Show all widgets
     gtk_widget_show_all(window);
