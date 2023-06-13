@@ -142,7 +142,7 @@ int gui_handler(int argc, char** argv) {
     // Create a text input field
     GtkWidget* file_entry = gtk_entry_new_with_buffer(eBuffer);
     gtk_entry_set_visibility(GTK_ENTRY(file_entry), TRUE);
-    gtk_table_attach(GTK_TABLE(table), file_entry, 1, 2, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_table_attach(GTK_TABLE(table), file_entry, 1, 2, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
 
 
@@ -151,7 +151,7 @@ int gui_handler(int argc, char** argv) {
     // Create a text input field
     GtkWidget* text_entry = gtk_entry_new_with_buffer(eBuffer2);
     gtk_entry_set_visibility(GTK_ENTRY(text_entry), TRUE);
-    //gtk_table_attach(GTK_TABLE(table), text_entry, 1, 2, 3, 4, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_table_attach(GTK_TABLE(table), text_entry, 7, 9, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
 
     // Create three buttons
@@ -179,7 +179,7 @@ int gui_handler(int argc, char** argv) {
     g_signal_connect(button4, "clicked", G_CALLBACK(encode_button_clicked), &qrData);
 
     // Pack buttons into the vertical box
-    gtk_table_attach(GTK_TABLE(table), button1, 1, 2, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_table_attach(GTK_TABLE(table), button1, 1, 2, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     gtk_table_attach(GTK_TABLE(table), button2, 3, 5, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     gtk_table_attach(GTK_TABLE(table), button3, 5, 7, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     gtk_table_attach(GTK_TABLE(table), button4, 7, 9, 1, 2, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);

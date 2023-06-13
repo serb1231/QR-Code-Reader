@@ -41,3 +41,13 @@ GtkWidget* QRData::get_textfield()
 {
     return QRData::textfield;
 }
+
+void QRData::set_text_entry(GtkWidget* NewEntry)
+{
+    QRData::text_entry = NewEntry;
+}
+
+GtkWidget* QRData::get_text_entry()
+{
+    return QRData::text_entry;
+}
