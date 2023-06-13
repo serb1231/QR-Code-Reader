@@ -63,7 +63,7 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
     QRData *data = static_cast<QRData *>(user_data);
 
     auto enc = ZX_Encoder();
-    std::string input_text_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_text_entry()));
+    std::string input_text_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_text_encoder_entry()));
     std::string path_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_textfield()));
     std::string input_filename_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_filename_entry()));
 
@@ -200,7 +200,7 @@ int gui_handler(int argc, char **argv)
     // Setting qrData variables
     qrData.set_input_filepath_textfield(input_filepath_decoder_entry);
     qrData.set_output_decoder_textfield(decoded_text_textview);
-    qrData.set_text_entry(input_text_encoder_entry);
+    qrData.set_input_text_encoder_entry(input_text_encoder_entry);
     qrData.set_filename_entry(input_filename_encoder_entry);
 
     // Show all widgets

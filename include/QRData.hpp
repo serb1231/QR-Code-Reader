@@ -9,7 +9,7 @@ private:
     std::string decoded_text;
     GtkWidget *input_filepath_textfield;
     GtkWidget *textfield;
-    GtkWidget *text_entry;
+    GtkWidget *input_text_encoder_entry;
     GtkWidget *filename_entry;
 
 public:
@@ -25,8 +25,8 @@ public:
     void set_output_decoder_textfield(GtkWidget *NewTextfield);
     GtkWidget *get_output_decoder_textfield();
 
-    void set_text_entry(GtkWidget *NewEntry);
-    GtkWidget *get_text_entry();
+    void set_input_text_encoder_entry(GtkWidget *NewEntry);
+    GtkWidget *get_input_text_encoder_entry();
 
     void set_filename_entry(GtkWidget *NewEntry);
     GtkWidget *get_filename_entry();

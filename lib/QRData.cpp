@@ -40,14 +40,14 @@ GtkWidget *QRData::get_output_decoder_textfield()
     return QRData::textfield;
 }
 
-void QRData::set_text_entry(GtkWidget *NewEntry)
+void QRData::set_input_text_encoder_entry(GtkWidget *NewEntry)
 {
-    QRData::text_entry = NewEntry;
+    QRData::input_text_encoder_entry = NewEntry;
 }
 
-GtkWidget *QRData::get_text_entry()
+GtkWidget *QRData::get_input_text_encoder_entry()
 {
-    return QRData::text_entry;
+    return QRData::input_text_encoder_entry;
 }
 
 void QRData::set_filename_entry(GtkWidget *NewEntry)
