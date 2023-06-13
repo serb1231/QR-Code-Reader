@@ -22,14 +22,14 @@ std::string QRData::get_decoded_text()
     return QRData::decoded_text;
 }
 
-void QRData::set_entry(GtkWidget* NewEntry)
+void QRData::set_file_entry(GtkWidget* NewEntry)
 {
-    QRData::entry = NewEntry;
+    QRData::file_entry = NewEntry;
 }
 
-GtkWidget* QRData::get_entry()
+GtkWidget* QRData::get_file_entry()
 {
-    return QRData::entry;
+    return QRData::file_entry;
 }
 
 void QRData::set_textfield(GtkWidget* NewTextfield)
