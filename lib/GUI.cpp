@@ -43,6 +43,19 @@ void button_clicked(GtkWidget *widget, gpointer user_data)
     }
     std::cout <<output << std::endl;
 
+    // Cast the data pointer to a GtkTextView pointer
+    GtkTextView* textview = GTK_TEXT_VIEW(data->get_textfield());
+
+    // Get the GtkTextBuffer of the textview
+    GtkTextBuffer* buffer = gtk_text_view_get_buffer(textview);
+
+    // Clear the existing text in the buffer
+    gtk_text_buffer_set_text(buffer, "", -1);
+
+    // Insert the new text into the buffer
+    const gchar* new_text = output.c_str();
+    gtk_text_buffer_insert_at_cursor(buffer, new_text, -1);
+
 }
 
 void entry_button_clicked(GtkWidget* widget, gpointer user_data) {
@@ -122,9 +135,18 @@ int gui_handler(int argc, char** argv) {
     GtkWidget *button1 = gtk_button_new_with_label("Use input path");
     GtkWidget *button2 = gtk_button_new_with_label("Open Explorer");
     GtkWidget *button3 = gtk_button_new_with_label("Decode QR-Image");
+    
+    // Create a GtkTextView widget
+    GtkWidget* textview = gtk_text_view_new();
+
+    GtkWidget* scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_table_attach(GTK_TABLE(table), textview, 1, 7, 3, 5, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Connect the "button1" signal to the signal handler
     qrData.set_entry(entry);
+    qrData.set_textfield(textview);
     g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), &qrData);
 
     // Connect button click event handlers

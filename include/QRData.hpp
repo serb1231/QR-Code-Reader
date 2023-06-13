@@ -8,6 +8,7 @@ struct QRData{
         std::string input_filepath;
         std::string decoded_text;
         GtkWidget* entry;
+        GtkWidget* textfield;
         
     public:
         void set_input_filepath(const std::string& filename);
@@ -18,4 +19,7 @@ struct QRData{
 
         void set_entry(GtkWidget* NewEntry);
         GtkWidget* get_entry();
+
+        void set_textfield(GtkWidget* NewTextfield);
+        GtkWidget* get_textfield();
 };
