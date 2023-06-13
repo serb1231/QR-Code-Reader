@@ -32,20 +32,30 @@ GtkWidget *QRData::get_input_filepath_textfield()
 
 void QRData::set_output_decoder_textfield(GtkWidget *NewTextfield)
 {
-    QRData::output_decoder_textfield = NewTextfield;
+    QRData::entry = NewEntry;
 }
 
-GtkWidget *QRData::get_output_decoder_textfield()
+GtkWidget* QRData::get_entry()
 {
-    return QRData::output_decoder_textfield;
+    return QRData::entry;
 }
 
-void QRData::set_image_widget(GtkWidget *new_image_widget)
+void QRData::set_textfield(GtkWidget* NewTextfield)
 {
-    QRData::image_widget = new_image_widget;
+    QRData::textfield = NewTextfield;
 }
 
-GtkWidget *QRData::get_image_widget()
+GtkWidget* QRData::get_textfield()
 {
     return QRData::image_widget;
+}
+
+void QRData::set_text_entry(GtkWidget* NewEntry)
+{
+    QRData::text_entry = NewEntry;
+}
+
+GtkWidget* QRData::get_text_entry()
+{
+    return QRData::text_entry;
 }
