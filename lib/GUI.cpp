@@ -42,30 +42,23 @@ void button_clicked(GtkWidget *widget, gpointer user_data)
 
 }
 
-// Enter Key event handler
-static void entry_activate_callback(GtkEntry* entry, gpointer user_data) {
-        QRData *data = static_cast<QRData *>(user_data);
-        data->set_input_filepath(gtk_entry_get_text(GTK_ENTRY(entry)));
-
-}
-
-void entry_button_clicked(GtkWidget* widget, GtkEntry* entry, gpointer user_data) {
+void entry_button_clicked(GtkWidget* widget, gpointer user_data) {
     g_print("You entered: ");
 
-    std::string input = gtk_entry_get_text(GTK_ENTRY(entry));
+    QRData *data = static_cast<QRData *>(user_data);
+
+    std::string input = gtk_entry_get_text(GTK_ENTRY(data->get_entry()));
     std::cout << input << std::endl;
     
     auto finder= ImageFinder();
 
     if(finder.CheckPathforImage(input)){
         open_image(input);
+        data->set_input_filepath(input);
     }else{
         g_print("Filepath does not lead to image. Please try again!\n");
     }
-    
 
-
-    
 }
 
 void open_filebrowser(GtkWidget *widget, gpointer user_data) {
@@ -124,17 +117,16 @@ int gui_handler(int argc, char** argv) {
 
     // Create three buttons
     GtkWidget *button1 = gtk_button_new_with_label("Use input path");
-    GtkWidget *button2 = gtk_button_new_with_label("browse");
+    GtkWidget *button2 = gtk_button_new_with_label("Open Explorer");
     GtkWidget *button3 = gtk_button_new_with_label("Decode QR-Image");
 
     // Connect the "button1" signal to the signal handler
-    g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), entry);
+    qrData.set_entry(entry);
+    g_signal_connect(button1, "clicked", G_CALLBACK(entry_button_clicked), &qrData);
 
     // Connect button click event handlers
     g_signal_connect(button2, "clicked", G_CALLBACK(open_filebrowser), &qrData);
     g_signal_connect(button3, "clicked", G_CALLBACK(button_clicked), &qrData);
-
-    g_signal_connect(entry, "changed", G_CALLBACK(entry_activate_callback), &qrData);
 
     // Pack buttons into the vertical box
     gtk_table_attach(GTK_TABLE(table), button1, 1, 2, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);

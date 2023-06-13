@@ -22,12 +22,12 @@ std::string QRData::get_decoded_text()
     return QRData::decoded_text;
 }
 
-void QRData::set_entry(GtkWidget NewEntry)
+void QRData::set_entry(GtkWidget* NewEntry)
 {
     QRData::entry = NewEntry;
 }
 
-GtkWidget QRData::get_entry()
+GtkWidget* QRData::get_entry()
 {
     return QRData::entry;
 }
