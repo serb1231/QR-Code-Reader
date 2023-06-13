@@ -6,6 +6,7 @@
 #include <Decoder.hpp>
 #include <ImageFinder.hpp>
 #include <ZXEncoder.hpp>
+#include <filesystem>
 
 #define STD_PADDING 5
 
@@ -65,9 +66,24 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
     QRData *data = static_cast<QRData *>(user_data);
 
     auto enc = ZX_Encoder();
+    std::string text_entry = gtk_entry_get_text(GTK_ENTRY(data->get_text_entry()));
+    std::string path_entry = gtk_entry_get_text(GTK_ENTRY(data->get_file_entry()));
+    std::string filename_entry = gtk_entry_get_text(GTK_ENTRY(data->get_filename_entry()));
+    
+    //Filepath needs to end with / to work with Encode function
+    if(path_entry.back()!='/'){
+        path_entry = path_entry + "/";
+    }
 
-	int err = enc.encode_text_QRcode("test text for encoding", "fromMain.jpg", "", 100, 0);
 
+	std::string err = enc.encode_text_QRcode(text_entry , filename_entry, path_entry, 100, 0);
+
+    if(err == "Image created successfully!\n"){
+        std::string full_image_path = path_entry + filename_entry;
+        open_image(full_image_path);
+    }else{
+        std::cout << err << std::endl;
+    }
 
 }
 
@@ -154,6 +170,14 @@ int gui_handler(int argc, char** argv) {
     gtk_table_attach(GTK_TABLE(table), text_entry, 7, 9, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
 
+    // Create a third entry buffer for manual text input
+    GtkEntryBuffer *eBuffer3 = gtk_entry_buffer_new("filename (.jpg or .png)",-1);
+    // Create a text input field
+    GtkWidget* filename_entry = gtk_entry_new_with_buffer(eBuffer3);
+    gtk_entry_set_visibility(GTK_ENTRY(filename_entry), TRUE);
+    gtk_table_attach(GTK_TABLE(table), filename_entry, 7, 9, 3, 4, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+
+
     // Create three buttons
     GtkWidget *button1 = gtk_button_new_with_label("Open filepath");
     GtkWidget *button2 = gtk_button_new_with_label("Open Explorer");
@@ -168,9 +192,13 @@ int gui_handler(int argc, char** argv) {
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_table_attach(GTK_TABLE(table), textview, 1, 7, 3, 5, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
-    // Connect the "button1" signal to the signal handler
+    //Setting qrData variables
     qrData.set_file_entry(file_entry);
     qrData.set_textfield(textview);
+    qrData.set_text_entry(text_entry);
+    qrData.set_filename_entry(filename_entry);
+
+    // Connect the "button1" signal to the signal handler
     g_signal_connect(button1, "clicked", G_CALLBACK(file_entry_button_clicked), &qrData);
 
     // Connect button click event handlers

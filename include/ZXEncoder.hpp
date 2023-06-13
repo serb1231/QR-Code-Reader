@@ -9,5 +9,5 @@
 class ZX_Encoder{
     public:
 
-    int encode_text_QRcode(std::string text, std::string file_name, std::string path, int size, int margin);
+    std::string encode_text_QRcode(std::string text, std::string file_name, std::string path, int size, int margin);
 };

@@ -25,24 +25,21 @@ std::string getFileType(std::string file_name)
     return file_type;
 }
 
-int ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std::string path, int size, int margin)
+std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std::string path, int size, int margin)
 {
     std::cout << "encoding..."
               << "\n";
     if (text.empty())
     {
-        std::cout << "ERROR: Passed text is empty." << std::endl;
-        return -1;
+        return "ERROR: Passed text is empty.";
     }
     if (file_name.empty())
     {
-        std::cout << "ERROR: Passed file name is empty." << std::endl;
-        return -1;
+        return "ERROR: Passed file name is empty.";
     }
     else if (file_name.find(".jpg") == 0 || file_name.find(".jpeg") == 0 || file_name.find(".png") == 0)
     {
-        std::cout << "ERROR: Passed file name doesn't have a file type. Supported formats are .jpg and .png." << std::endl;
-        return -1;
+        return "ERROR: Passed file name doesn't have a file type. Supported formats are .jpg and .png.";
     }
     std::cout << file_name << "\n";
 
@@ -99,8 +96,7 @@ int ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std:
 
     if (!success)
     {
-        std::cerr << "Failed to write image: " << file_name << " to " << path << std::endl;
-        return -1;
+        return "Failed to write image: " + file_name + " to " + path;
     }
-    return 0;
+    return "Image created successfully!\n";
 }

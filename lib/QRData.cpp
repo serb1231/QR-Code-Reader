@@ -51,3 +51,13 @@ GtkWidget* QRData::get_text_entry()
 {
     return QRData::text_entry;
 }
+
+void QRData::set_filename_entry(GtkWidget* NewEntry)
+{
+    QRData::filename_entry = NewEntry;
+}
+
+GtkWidget* QRData::get_filename_entry()
+{
+    return QRData::filename_entry;
+}
