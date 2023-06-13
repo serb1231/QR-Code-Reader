@@ -12,6 +12,8 @@
 
 void print_to_gui_log(std::string message, QRData *qrData)
 {
+    g_print("%s", message);
+
     // Cast the data pointer to a GtkTextView pointer
     GtkTextView *textview = GTK_TEXT_VIEW(qrData->get_message_log_textview());
 
@@ -35,9 +37,7 @@ void open_image(const std::string &path, QRData qrData)
 
     if (!image.data)
     {
-        g_print("Seleced File was not an image\n");
         print_to_gui_log("Seleced File was not an image\n", &qrData);
-
         return;
     }
 
@@ -58,7 +58,6 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
     {
         data->set_decoded_text(output);
     }
-    std::cout << output << std::endl;
     print_to_gui_log(output + "\n", data);
 }
 
@@ -72,16 +71,16 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
     std::string path_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_textfield()));
     std::string input_filename_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_filename_entry()));
 
-    std::string err = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 100, 0);
-
-    if (err == "Image created successfully!\n")
+    std::string output = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 100, 0);
+    print_to_gui_log(output, data);
+    if (output == "Image created successfully!\n")
     {
         std::string full_image_path = path_entry + input_filename_encoder_entry;
         open_image(full_image_path, *data);
     }
     else
     {
-        std::cout << err << std::endl;
+        std::cout << output << std::endl;
     }
 }
 
@@ -90,7 +89,6 @@ void path_entry_button_clicked(GtkWidget *widget, gpointer user_data)
     QRData *data = static_cast<QRData *>(user_data);
 
     std::string input = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_textfield()));
-    std::cout << "Your entered: " << input << std::endl;
     print_to_gui_log("Your entered: " + input + "\n", data);
 
     auto finder = ImageFinder();
@@ -102,7 +100,6 @@ void path_entry_button_clicked(GtkWidget *widget, gpointer user_data)
     }
     else
     {
-        g_print("Filepath does not lead to image. Please try again!\n");
         print_to_gui_log("Filepath does not lead to image. Please try again!\n", data);
     }
 }
@@ -126,14 +123,12 @@ void explorer_button_clicked(GtkWidget *widget, gpointer user_data)
 
         open_image(filename, *data);
 
-        g_print("Selected file: %s\n", filename.c_str());
         print_to_gui_log("Selected file: " + filename + "\n", data);
-
+        gtk_entry_set_text(GTK_ENTRY(data->get_input_filepath_textfield()), filename.c_str());
         data->set_input_filepath(filename);
     }
     else
     {
-        g_print("File selection canceled by the user\n");
         print_to_gui_log("File selection canceled by the user\n", data);
     }
 
