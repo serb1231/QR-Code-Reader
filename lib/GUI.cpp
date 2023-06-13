@@ -150,6 +150,19 @@ int gui_handler(int argc, char **argv)
     GtkWidget *table = gtk_table_new(200, 200, false);
     gtk_container_add(GTK_CONTAINER(window), table);
 
+    // GtkWidget *fixed = gtk_fixed_new();
+    // gtk_container_add(GTK_CONTAINER(window), fixed);
+
+    // // Create a GTK Notebook
+    // GtkWidget *notebook = gtk_notebook_new();
+    // gtk_container_add(GTK_CONTAINER(window), notebook);
+
+    // GtkWidget *page1 = gtk_label_new("Decoder");
+    // GtkWidget *page2 = gtk_label_new("Encoder");
+
+    // gtk_notebook_append_page(GTK_NOTEBOOK(notebook), table, page1);
+    // gtk_notebook_append_page(GTK_NOTEBOOK(notebook), fixed, page2);
+
     // Create an entry buffer for manual path and file input for the decoder
     GtkEntryBuffer *input_path_decoder_eBuffer = gtk_entry_buffer_new("filepath to image", -1);
     // Create a text input field
@@ -196,13 +209,15 @@ int gui_handler(int argc, char **argv)
     gtk_entry_set_visibility(GTK_ENTRY(input_filepath_encoder_entry), TRUE);
     gtk_table_attach(GTK_TABLE(table), input_filepath_encoder_entry, 2, 11, 8, 9, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
-    // Create three buttons, attach them/place them on the table and connect the signals
+    // Create buttons, attach them/place them on the table and connect the signals
     GtkWidget *path_entry_button = gtk_button_new_with_label("Open file from path");
     gtk_table_attach(GTK_TABLE(table), path_entry_button, 2, 3, 4, 5, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     g_signal_connect(path_entry_button, "clicked", G_CALLBACK(path_entry_button_clicked), &qrData);
 
-    GtkWidget *explorer_button = gtk_button_new_with_label("Open Explorer");
-    gtk_table_attach(GTK_TABLE(table), explorer_button, 14, 15, 2, 3, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    GtkWidget *explorer_button = gtk_button_new_with_label("");
+    GtkWidget *explorer_icon = gtk_image_new_from_icon_name("folder", GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image(GTK_BUTTON(explorer_button), explorer_icon);
+    gtk_table_attach(GTK_TABLE(table), explorer_button, 14, 15, 2, 3, GTK_SHRINK, GTK_SHRINK, STD_PADDING, STD_PADDING);
     g_signal_connect(explorer_button, "clicked", G_CALLBACK(explorer_button_clicked), &qrData);
 
     GtkWidget *decode_button = gtk_button_new_with_label("Decode QR-Image");
@@ -210,7 +225,7 @@ int gui_handler(int argc, char **argv)
     g_signal_connect(decode_button, "clicked", G_CALLBACK(decode_button_clicked), &qrData);
 
     GtkWidget *encode_button = gtk_button_new_with_label("Encode Text to QR-Image");
-    gtk_table_attach(GTK_TABLE(table), encode_button, 2, 3, 12, 13, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    // gtk_table_attach(GTK_TABLE(table), encode_button, 2, 3, 12, 13, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     g_signal_connect(encode_button, "clicked", G_CALLBACK(encode_button_clicked), &qrData);
 
     // Setting qrData variables
@@ -219,6 +234,9 @@ int gui_handler(int argc, char **argv)
     qrData.set_input_text_encoder_entry(input_text_encoder_entry);
     qrData.set_filename_entry(input_filename_encoder_entry);
     qrData.set_message_log_textview(message_log_textview);
+
+    gtk_fixed_put(GTK_FIXED(fixed), encode_button, 50, 50);
+    gtk_widget_set_size_request(encode_button, 100, 30);
 
     // Show all widgets
     gtk_widget_show_all(window);
