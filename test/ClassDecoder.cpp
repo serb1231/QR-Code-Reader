@@ -1,7 +1,8 @@
 #include <Decoder.hpp>
 #include <stdio.h>
 
-int main(){
+int main()
+{
 
     auto dec = Decoder();
     std::string data;
@@ -11,6 +12,4 @@ int main(){
     std::cout << data << std::endl;
 
     return 0;
-
 }
-
