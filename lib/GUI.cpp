@@ -31,14 +31,14 @@ void open_image(const std::string& path){
 // Button click event handler
 void button_clicked(GtkWidget *widget, gpointer user_data)
 {
-    g_print("Button clicked!\n");
+    //g_print("Button clicked!\n");
     QRData *data = static_cast<QRData *>(user_data);
 
     auto dec = Decoder();
 
     cv::Mat image = cv::imread(data->get_input_filepath());
-    int err = dec.decode(image);
-
+    std::string output = dec.decode(image);
+    std::cout <<output << std::endl;
 
 }
 

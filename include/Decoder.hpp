@@ -9,6 +9,6 @@
 class Decoder{
     public:
 
-    int decode(cv::Mat QRimage);
+    std::string decode(cv::Mat QRimage);
 
 };
