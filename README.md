@@ -66,22 +66,22 @@ Once the project is built and running, this program is capable of doing two diff
 The decoder enables you to decode QR-codes into text that is then output to the first text output field. 
 To achieve a successful decode, make sure to follow the following steps:
 
-+ Chose a file via the file explorer or input the file path leading to an image manually
-+ If file was chosen manually, press "Open file from path"
-+ If file path was correct, the image should open in a separate window
-+ Press "Decode QR Image"
-+ If the decoder fails or the file path does not lead to an image, an error message should appear in the bottom text output field
++ Chose a file via the file explorer or input the file path leading to an image manually <br>
++ If file was chosen manually, press "Open file from path" <br>
++ If file path was correct, the image should open in a separate window <br>
++ Press "Decode QR Image" <br>
++ If the decoder fails or the file path does not lead to an image, an error message should appear in the bottom text output field <br>
 
 ### QR Encoder
 The encoder allows you to encode any text into a QR Code that is then saved as an image. 
 To achieve a successful encode, make sure to follow these steps:
 
-+ Input a filename for the created image
-+ The filename must end with a supported file extension. Supported file types are: .png, .jpeg and .jpg
-+ Input a file path to where the image should be saved
-+ File path can end with "/", but does not have to
-+ Enter the text you want to encode
-+ Press "Encode Text to QR-Image"
++ Input a filename for the created image <br>
++ The filename must end with a supported file extension. Supported file types are: .png, .jpeg and .jpg <br>
++ Input a file path to where the image should be saved <br>
++ File path can end with "/", but does not have to <br>
++ Enter the text you want to encode <br>
++ Press "Encode Text to QR Image" <br>
 
 If every input was correct the message "Image created successfully!" should appear and the newly created image is opened in a separate window. 
 Any error that occurs when trying to encode should be output to the bottom text output field. Errors could be wrong filepath, missing file extension, missing text to encode… Type of error should be easily recognizable through the error message.
@@ -91,7 +91,6 @@ Any error that occurs when trying to encode should be output to the bottom text 
 The project documentation can be generated using Doxygen. To generate the documentation, execute the following command in the project root directory:
 
     doxygen Doxyfile
-
 
 The generated documentation will be available in the docs directory.
 
