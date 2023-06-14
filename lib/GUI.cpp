@@ -207,6 +207,7 @@ int gui_handler(int argc, char **argv)
 
     // Create a GTK window
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_default_size (GTK_WINDOW(window), 20*STD_SIZE, 20*STD_SIZE);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     // Create a fixed container
@@ -224,12 +225,12 @@ int gui_handler(int argc, char **argv)
     // Create a GtkTextView widget to display the decoded text
     GtkWidget *decoded_text_textview = gtk_text_view_new();
     gtk_text_view_set_editable(GTK_TEXT_VIEW(decoded_text_textview), FALSE);
-    GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
-    gtk_container_add(GTK_CONTAINER(scrolled_window), decoded_text_textview);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
+    GtkWidget *decoded_text_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_container_add(GTK_CONTAINER(decoded_text_scrolled_window), decoded_text_textview);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(decoded_text_scrolled_window),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_fixed_put(GTK_FIXED(fixed), scrolled_window, 1 * STD_SIZE, 4 * STD_SIZE);
-    gtk_widget_set_size_request(scrolled_window, 18 * STD_SIZE, 2 * STD_SIZE);
+    gtk_fixed_put(GTK_FIXED(fixed), decoded_text_scrolled_window, 1 * STD_SIZE, 4 * STD_SIZE);
+    gtk_widget_set_size_request(decoded_text_scrolled_window, 18 * STD_SIZE, 2 * STD_SIZE);
 
     // Create a GtkTextView widget to display various messages like errors and so on
     GtkWidget *message_log_textview = gtk_text_view_new();
@@ -254,7 +255,7 @@ int gui_handler(int argc, char **argv)
     // Create a text input field
     GtkWidget *input_filename_encoder_entry = gtk_entry_new_with_buffer(input_filename_encoder_eBuffe);
     gtk_entry_set_visibility(GTK_ENTRY(input_filename_encoder_entry), TRUE);
-    gtk_fixed_put(GTK_FIXED(fixed), input_filename_encoder_entry, 1*STD_SIZE,8*STD_SIZE);
+    gtk_fixed_put(GTK_FIXED(fixed), input_filename_encoder_entry, 1 * STD_SIZE, 8 * STD_SIZE);
     gtk_widget_set_size_request(input_filename_encoder_entry, 3 * STD_SIZE, 1 * STD_SIZE);
 
     // Create an entry buffer for manual path and file input for the decoder
@@ -262,33 +263,39 @@ int gui_handler(int argc, char **argv)
     // Create a text input field
     GtkWidget *input_filepath_encoder_entry = gtk_entry_new_with_buffer(input_path_encoder_eBuffer);
     gtk_entry_set_visibility(GTK_ENTRY(input_filepath_encoder_entry), TRUE);
-    gtk_fixed_put(GTK_FIXED(fixed), input_filepath_encoder_entry, 4, 18, 9, 10, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_fixed_put(GTK_FIXED(fixed), input_filepath_encoder_entry, 5 * STD_SIZE, 8 * STD_SIZE);
+    gtk_widget_set_size_request(input_filepath_encoder_entry, 11 * STD_SIZE, 1 * STD_SIZE);
 
     // Create buttons, attach/place them on the fixed and connect the signals
     GtkWidget *path_entry_button = gtk_button_new_with_label("Open file from path");
-    gtk_fixed_put(GTK_FIXED(fixed), path_entry_button, 2, 3, 3, 4, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_fixed_put(GTK_FIXED(fixed), path_entry_button, 1 * STD_SIZE, 2 * STD_SIZE);
+    gtk_widget_set_size_request(path_entry_button, 2 * STD_SIZE, 1 * STD_SIZE);
     g_signal_connect(path_entry_button, "clicked", G_CALLBACK(path_entry_button_clicked), &qrData);
 
     // the explorer button shouldn't have text but only an icon
     GtkWidget *input_explorer_button = gtk_button_new_with_label("");
     GtkWidget *input_explorer_icon = gtk_image_new_from_icon_name("folder", GTK_ICON_SIZE_BUTTON);
     gtk_button_set_image(GTK_BUTTON(input_explorer_button), input_explorer_icon);
-    gtk_fixed_put(GTK_FIXED(fixed), input_explorer_button, 18, 19, 2, 3, GTK_SHRINK, GTK_SHRINK, STD_PADDING, STD_PADDING);
+    gtk_fixed_put(GTK_FIXED(fixed), input_explorer_button, 18 * STD_SIZE, 1 * STD_SIZE);
+    gtk_widget_set_size_request(input_explorer_button, 1 * STD_SIZE, 1 * STD_SIZE);
     g_signal_connect(input_explorer_button, "clicked", G_CALLBACK(input_explorer_button_clicked), &qrData);
 
     GtkWidget *decode_button = gtk_button_new_with_label("Decode QR-Image");
-    gtk_fixed_put(GTK_FIXED(fixed), decode_button, 5, 6, 3, 4, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_fixed_put(GTK_FIXED(fixed), decode_button, 4 * STD_SIZE, 2 * STD_SIZE);
+    gtk_widget_set_size_request(decode_button, 2 * STD_SIZE, 1 * STD_SIZE);
     g_signal_connect(decode_button, "clicked", G_CALLBACK(decode_button_clicked), &qrData);
 
     GtkWidget *encode_button = gtk_button_new_with_label("Encode Text to QR-Image");
-    gtk_fixed_put(GTK_FIXED(fixed), encode_button, 2, 3, 13, 14, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_fixed_put(GTK_FIXED(fixed), encode_button, 1 * STD_SIZE, 12 * STD_SIZE);
+    gtk_widget_set_size_request(encode_button, 2 * STD_SIZE, 1 * STD_SIZE);
     g_signal_connect(encode_button, "clicked", G_CALLBACK(encode_button_clicked), &qrData);
 
     // the explorer button shouldn't have text but only an icon
     GtkWidget *output_explorer_button = gtk_button_new_with_label("");
     GtkWidget *output_explorer_icon = gtk_image_new_from_icon_name("folder", GTK_ICON_SIZE_BUTTON);
     gtk_button_set_image(GTK_BUTTON(output_explorer_button), output_explorer_icon);
-    gtk_fixed_put(GTK_FIXED(fixed), output_explorer_button, 18, 19, 9, 10, GTK_SHRINK, GTK_SHRINK, STD_PADDING, STD_PADDING);
+    gtk_fixed_put(GTK_FIXED(fixed), output_explorer_button, 18 * STD_SIZE, 8 * STD_SIZE);
+    gtk_widget_set_size_request(output_explorer_button, 1 * STD_SIZE, 1 * STD_SIZE);
     g_signal_connect(output_explorer_button, "clicked", G_CALLBACK(output_explorer_button_clicked), &qrData);
 
     // Setting qrData variables
