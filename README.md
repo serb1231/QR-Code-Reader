@@ -5,118 +5,114 @@ This project aim is to deliver a program capable of offering its users a seamles
 
 ## Dependencies
 
-The project uses the following libraries:
+The project uses the following libraries
 
-    * doxygen version 1.9.2: A documentation generator for generating project documentation.
-
-    * opencv version 4.5.5: A computer vision library for image processing and computer vision algorithms.
-
-    * zxing-cpp version 2.0.0: A C++ port of the ZXing library for QR code encoding and decoding.
-    
-    * stb version cci.20220909: A collection of single-file public domain libraries for C/C++.
++ doxygen version 1.9.2: A documentation generator for generating project documentation <br>
++ opencv version 4.5.5: A computer vision library for image processing and computer vision algorithms <br>
++ zxing-cpp version 2.0.0: A C++ port of the ZXing library for QR code encoding and decoding <br>
++ stb version cci.20220909: A collection of single-file public domain libraries for C/C++ <br>
 
 ## Building the Project
 
 To build the project locally, you need to ensure that the appropriate settings are set in the Conan profile file. The Conan package manager is used to handle the project's dependencies.
 
-Please follow the steps below to configure the Conan profile:
+Please follow the steps below to configure the Conan profile
+1. Locate the Conan profile file. The default location for the profile file is usually <br>
+```
+~/.conan/profiles/default.
+```
+2. Open the profile file using a text editor.
 
-    1. Locate the Conan profile file. The default location for the profile file is usually 
-    ```
-    ~/.conan/profiles/default.
-    ```
-    
-    2. Open the profile file using a text editor.
+3. Verify that the following settings are added in the profile file:
+```
+[env]
+tools.system.package_manager:mode = install
+tools.system.package_manager:sudo = True
+```
 
-    3. Verify that the following settings are added in the profile file:
-    ```
-        [env]
-        tools.system.package_manager:mode = install
-        tools.system.package_manager:sudo = True
-    ```
+4. Save the changes to the profile file.
 
-    4. Save the changes to the profile file.
-
-    Once you have configured the Conan profile, you can proceed with building the project.
+Once you have configured the Conan profile, you can proceed with building the project.
 
 ## Building Instructions
 
-To build the project, follow these steps:
+To build the project, follow these steps
 
-    5. Clone the project repository:
-    ```
-        https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
-    ```
+5. Clone the project repository:
+```
+https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
+```
 
-    6. Change to the project directory:
-    ```
-        GroupNProject
-    ```
+6. Change to the project directory:
+```
+cd GroupNProject
+```
 
-    7. Create a build directory:
-    ```
-        mkdir build
-        cd build
-    ```
+7. Create a build directory:
+```
+mkdir build
+cd build
+```
 
-    8. Initialize Conan:
-    ```
-        conan install ..
-    ```
+8. Initialize Conan:
+```
+conan install ..
+```
 
-    9. Configure the build system (CMake):
-    ```
-        cmake ..
-    ```
+9. Configure the build system (CMake):
+```
+cmake ..
+```
 
-    10. Build the project:
-    ```
-        make
-    ```
+10. Build the project
+```
+make
+```
 
-    11. Switch to the bin folder
-    ```
-        cd bin
-    ```
+11. Switch to the bin folder
+```
+cd bin
+```
 
-    12. Run the project:
-    ```
-        ./UI_test
-    ```
+12. Run the project:
+```
+./UI_test
+```
 
 Please note that these instructions assume you have already installed the required dependencies and have a suitable C++ compiler installed on your system.
 
 ## Usage
-Once the project is built and running, this program is capable of doing two different separate operations:
+Once the project is built and running, this program is capable of doing two different separate operations
 
 ### QR Decoder 
-    The decoder enables you to decode QR-codes into text that is then output to the first text output field. To achieve a successful decode make sure to follow these steps:
+The decoder enables you to decode QR-codes into text that is then output to the first text output field. To achieve a successful decode make sure to follow these steps:
 
-    Chose a file via the file explorer or input the file path leading to an image manually.
-        If file was chosen manually, press “Open file from path”. If file path was correct, the image should open in a separate window.
-    Press “Decode QR-Image”.
+Chose a file via the file explorer or input the file path leading to an image manually.
+If file was chosen manually, press “Open file from path”. If file path was correct, the image should open in a separate window.
 
-    If the decoder fails or the file path does not lead to an image, an error message should appear in the bottom text output field.
+Press “Decode QR-Image”.
+
+If the decoder fails or the file path does not lead to an image, an error message should appear in the bottom text output field.
 
 ### QR Encoder
-    The encoder allows you to encode any text into an QR-Code that is then saved as an image. To achieve a successful encode, make sure to follow these steps:
+The encoder allows you to encode any text into an QR-Code that is then saved as an image. To achieve a successful encode, make sure to follow these steps:
 
-    Input a filename for the created image.
-        Filename must end with supported file extension. Supported file types are .png, .jpeg and .jpg.
-    Input a file path to where the image should be saved.
-        File path can end with “/”, but does not have to.
-    Enter the text you want to encode.
-    Press “Encode Text to QR-Image”.
+Input a filename for the created image.
+Filename must end with supported file extension. Supported file types are .png, .jpeg and .jpg.
+Input a file path to where the image should be saved.
+File path can end with “/”, but does not have to.
+Enter the text you want to encode.
+Press “Encode Text to QR-Image”.
 
-    If every input was correct the message “Image created successfully!” should appear and the newly created image is opened in a separate window. Any error that occurs when trying to encode should be output to the bottom text output field. Errors could be wrong filepath, missing file extension, missing text to encode… Type of error should be easily recognizable through the error message.
+If every input was correct the message “Image created successfully!” should appear and the newly created image is opened in a separate window. Any error that occurs when trying to encode should be output to the bottom text output field. Errors could be wrong filepath, missing file extension, missing text to encode… Type of error should be easily recognizable through the error message.
 
 ## Documentation
 
 The project documentation can be generated using Doxygen. To generate the documentation, execute the following command in the project root directory:
 
-    ```
-        doxygen Doxyfile
-    ```
+```
+doxygen Doxyfile
+```
 
 The generated documentation will be available in the docs directory.
 
