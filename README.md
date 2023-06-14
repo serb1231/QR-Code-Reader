@@ -109,6 +109,8 @@ Our plans for the further development of this project encompass two significant 
 
 ## License
 This project is licensed under the GNU GENERAL PUBLIC LICENSE
+The project utilizes the following libraries: OpenCV, STB, ZXing-Cpp, and Doxygen. These libraries have been instrumental in enhancing the project's functionality and documentation. 
+Gratitude is extended to the developers of these libraries for their valuable contributions.
 
 ## Team
 - Maximilian Seiringer (12030168)
