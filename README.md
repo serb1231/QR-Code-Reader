@@ -1,11 +1,11 @@
 <!-- Choose a meaningful title for your project -->
 # QR Code Reader in C++
 
-This project aim is to deliver a program capable of offering its users a seamless experience when dealing with QR Codes. It is possible to choose a file via a file explorer and if it is a QR Code to decode it. Another use case is encoding some text and save it as a QR Code. 
+This project's aim is to deliver a program capable of offering its users a seamless experience when dealing with QR Codes. It is possible to choose a file via a file explorer and if it is a QR Code to decode it. Another use case is encoding some text and saving it as a QR Code. 
 
 ## Dependencies
 
-The project uses the following libraries
+To achieve this the project uses the following libraries:
 
 + doxygen version 1.9.2: A documentation generator for generating project documentation <br>
 + opencv version 4.5.5: A computer vision library for image processing and computer vision algorithms <br>
@@ -17,10 +17,10 @@ The project uses the following libraries
 To build the project locally, you need to ensure that the appropriate settings are set in the Conan profile file. The Conan package manager is used to handle the project's dependencies.
 
 Please follow the steps below to configure the Conan profile
-1. Locate the Conan profile file. The default location for the profile file is usually <br>
-    ~/.conan/profiles/default.
+1. Locate the Conan profile file. The default location for the profile file is usually
+    ~/.conan/profiles/default
 2. Open the profile file using a text editor.
-3. Verify that the following settings are added in the profile file:
+3. Verify that the following settings are added at the bottom in the profile file:
     [env]
     tools.system.package_manager:mode = install
     tools.system.package_manager:sudo = True
@@ -48,41 +48,43 @@ To build the project, follow these steps:
 9. Configure the build system (CMake):
     cmake ..
 
-10. Build the project
+10. Build the project:
     make
 
-11. Switch to the bin folder
+11. Switch to the bin directory:
     cd bin
 
 12. Run the project:
     ./UI_test
 
-Please note that these instructions assume you have already installed the required dependencies and have a suitable C++ compiler installed on your system.
+Please note: these instructions assume you have already installed the required dependencies and have a suitable C++ compiler installed on your system.
 
 ## Usage
-Once the project is built and running, this program is capable of doing two different separate operations
+Once the project is built and running, this program is capable of doing two different separate operations:
 
 ### QR Decoder 
-The decoder enables you to decode QR-codes into text that is then output to the first text output field. To achieve a successful decode make sure to follow these steps:
+The decoder enables you to decode QR-codes into text that is then output to the first text output field. 
+To achieve a successful decode, make sure to follow the following steps:
 
-Chose a file via the file explorer or input the file path leading to an image manually.
-If file was chosen manually, press “Open file from path”. If file path was correct, the image should open in a separate window.
-
-Press “Decode QR-Image”.
-
-If the decoder fails or the file path does not lead to an image, an error message should appear in the bottom text output field.
++ Chose a file via the file explorer or input the file path leading to an image manually
++ If file was chosen manually, press "Open file from path"
++ If file path was correct, the image should open in a separate window
++ Press "Decode QR Image"
++ If the decoder fails or the file path does not lead to an image, an error message should appear in the bottom text output field
 
 ### QR Encoder
-The encoder allows you to encode any text into an QR-Code that is then saved as an image. To achieve a successful encode, make sure to follow these steps:
+The encoder allows you to encode any text into a QR Code that is then saved as an image. 
+To achieve a successful encode, make sure to follow these steps:
 
-Input a filename for the created image.
-Filename must end with supported file extension. Supported file types are .png, .jpeg and .jpg.
-Input a file path to where the image should be saved.
-File path can end with “/”, but does not have to.
-Enter the text you want to encode.
-Press “Encode Text to QR-Image”.
++ Input a filename for the created image
++ The filename must end with a supported file extension. Supported file types are: .png, .jpeg and .jpg
++ Input a file path to where the image should be saved
++ File path can end with "/", but does not have to
++ Enter the text you want to encode
++ Press "Encode Text to QR-Image"
 
-If every input was correct the message “Image created successfully!” should appear and the newly created image is opened in a separate window. Any error that occurs when trying to encode should be output to the bottom text output field. Errors could be wrong filepath, missing file extension, missing text to encode… Type of error should be easily recognizable through the error message.
+If every input was correct the message "Image created successfully!" should appear and the newly created image is opened in a separate window. 
+Any error that occurs when trying to encode should be output to the bottom text output field. Errors could be wrong filepath, missing file extension, missing text to encode… Type of error should be easily recognizable through the error message.
 
 ## Documentation
 
