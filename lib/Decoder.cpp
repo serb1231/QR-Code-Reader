@@ -84,11 +84,11 @@ for(double alpha = 0.5; alpha <= 2; alpha += 0.5) {
         /// QR code detected and decoded successfully
         return data;
     }
-    else
-    {   
-        /// QR code not detected or decoding failed
-        std::cout << "QR code not found or decoding failed" << std::endl;
-    }
+    // else
+    // {   
+    //     /// QR code not detected or decoding failed
+    //     std::cout << "QR code not found or decoding failed" << std::endl;
+    // }
 
 
         }
