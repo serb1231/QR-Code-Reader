@@ -1,73 +1,136 @@
-# QRCoder
+<!-- Choose a meaningful title for your project -->
+# QR Code Reader in C++
 
-This repository should give an impression how C++ and Python could work together with pybind11, using cmake as an build-environment and doxygen for documentation.
+This project aim is to deliver a program capable of offering its users a seamless experience when dealing with QR Codes. It is possible to choose a file via a file explorer and if it is a QR Code to decode it. Another use case is encoding some text and save it as a QR Code. 
 
---------------------------
-## Pre-Requisits
+## Dependencies
 
-- `conan` (for dependency management)
-- `CMake`
-- `C++17 Compiler`
-- `python3`
-- `python3-pip`
-- `python3-venv`
+The project uses the following libraries:
 
-### Supported Platforms
+    * doxygen version 1.9.2: A documentation generator for generating project documentation.
+    * opencv version 4.5.5: A computer vision library for image processing and computer vision algorithms.
+    * zxing-cpp version 2.0.0: A C++ port of the ZXing library for QR code encoding and decoding.
+    * stb version cci.20220909: A collection of single-file public domain libraries for C/C++.
 
-Currently, only **Linux** is supported and tested for. If you find problems for Windows/Mac please let us know how you solved them!
+## Building the Project
 
---------------------------
-## Building
+To build the project locally, you need to ensure that the appropriate settings are set in the Conan profile file. The Conan package manager is used to handle the project's dependencies.
 
-```
-mkdir build && cd build
-cmake ..
-make
-```
+Please follow the steps below to configure the Conan profile:
 
---------------------------
-## Installing
+    1. Locate the Conan profile file. The default location for the profile file is usually 
+    ```
+    ~/.conan/profiles/default.
+    ```
+    
+    2. Open the profile file using a text editor.
 
-To install all targets to a local folder:
-```
-cd build
-cmake ..
-make install
-```
+    3. Verify that the following settings are added in the profile file:
+    ```
+        [env]
+        tools.system.package_manager:mode = install
+        tools.system.package_manager:sudo = True
+    ```
 
---------------------------
-## Testing
+    4. Save the changes to the profile file.
 
-To run the tests:
-```
-cd build
-cmake ..
-make buildtests
-make buildpytests
-make test
-```
+    Once you have configured the Conan profile, you can proceed with building the project.
 
---------------------------
+## Building Instructions
+
+To build the project, follow these steps:
+
+    5. Clone the project repository:
+    ```
+        https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
+    ```
+
+    6. Change to the project directory:
+    ```
+        GroupNProject
+    ```
+
+    7. Create a build directory:
+    ```
+        mkdir build
+        cd build
+    ```
+
+    8. Initialize Conan:
+    ```
+        conan install ..
+    ```
+
+    9. Configure the build system (CMake):
+    ```
+        cmake ..
+    ```
+
+    10. Build the project:
+    ```
+        make
+    ```
+
+    11. Switch to the bin folder
+    ```
+        cd bin
+    ```
+
+    12. Run the project:
+    ```
+        ./UI_test
+    ```
+
+Please note that these instructions assume you have already installed the required dependencies and have a suitable C++ compiler installed on your system.
+
+## Usage
+Once the project is built and running, this program is capable of doing two different separate operations:
+
+### QR Decoder 
+    The decoder enables you to decode QR-codes into text that is then output to the first text output field. To achieve a successful decode make sure to follow these steps:
+
+    Chose a file via the file explorer or input the file path leading to an image manually.
+        If file was chosen manually, press “Open file from path”. If file path was correct, the image should open in a separate window.
+    Press “Decode QR-Image”.
+
+    If the decoder fails or the file path does not lead to an image, an error message should appear in the bottom text output field.
+
+### QR Encoder
+    The encoder allows you to encode any text into an QR-Code that is then saved as an image. To achieve a successful encode, make sure to follow these steps:
+
+    Input a filename for the created image.
+        Filename must end with supported file extension. Supported file types are .png, .jpeg and .jpg.
+    Input a file path to where the image should be saved.
+        File path can end with “/”, but does not have to.
+    Enter the text you want to encode.
+    Press “Encode Text to QR-Image”.
+
+    If every input was correct the message “Image created successfully!” should appear and the newly created image is opened in a separate window. Any error that occurs when trying to encode should be output to the bottom text output field. Errors could be wrong filepath, missing file extension, missing text to encode… Type of error should be easily recognizable through the error message.
+
 ## Documentation
 
-To build the documentation:
-```
-cd build
-cmake -D BUILD_DOCS=ON ..
-make docs
-```
+The project documentation can be generated using Doxygen. To generate the documentation, execute the following command in the project root directory:
 
---------------------------
-## Contributing
+    ```
+        doxygen Doxyfile
+    ```
 
-Please run ``format-project.sh`` before commiting.
+The generated documentation will be available in the docs directory.
 
---------------------------
-## Authors
-ViennaExample was developed under the aegis of the 'Institute for Microelectronics' at the 'TU Wien'.
-http://www.iue.tuwien.ac.at/
-
---------------------------
 ## License
-See file LICENSE in the base directory.
-q
+This project is licensed under the GNU GENERAL PUBLIC LICENSE
+
+## Team
+<!-- A list of team mebers including student ID and their tasks.
+NOTE: "Testing" is not a valid task: EVERY memeber should immediately write tests for the components they implemented. However, there should be one person tying all tests together and creating some end-to-end tests. -->
+- Maximilian Seiringer (12030168)
+- Lukas Buza (11917677)
+- Matteo Ingegneri (11917678)
+- Mario Lang (11901887)
+- Lucas Minarik (01608718)
+- Serban-Mihai Ionescu  (12202437)
+
+
+## References
+[1] https://opencv.org/<br>
+[2] https://learnopencv.com/opencv-qr-code-scanner-c-and-python/<br>
