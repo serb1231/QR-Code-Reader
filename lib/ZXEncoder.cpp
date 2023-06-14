@@ -12,6 +12,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include <filesystem>
 
 using namespace ZXing;
 
@@ -27,8 +28,7 @@ std::string getFileType(std::string file_name)
 
 std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_name, std::string path, int size, int margin)
 {
-    std::cout << "encoding..."
-              << "\n";
+    std::cout << "Encoding started..." << std::endl;
     if (text.empty())
     {
         return "ERROR: Passed text is empty.";
@@ -37,29 +37,33 @@ std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_na
     {
         return "ERROR: Passed file name is empty.";
     }
-    else if (file_name.find(".jpg") == 0 || file_name.find(".jpeg") == 0 || file_name.find(".png") == 0)
-    {
-        return "ERROR: Passed file name doesn't have a file type. Supported formats are .jpg and .png.";
+
+    if(file_name.length()>=5){
+        std::string last5char = file_name.substr(file_name.length()-5);
+        std::string last4char = file_name.substr(file_name.length()-4);
+
+         if (last4char.find(".jpg") == std::string::npos && last5char.find(".jpeg") == std::string::npos && last4char.find(".png") == std::string::npos)
+        {
+            return "ERROR: Passed file name doesn't have a file type. Supported formats are .jpg, .jpeg and .png.";
+        }
+    }else{
+
+        return "ERROR: Passed file name doesn't have a file type. Supported formats are .jpg, .jpeg and .png.";
     }
-    std::cout << file_name << "\n";
 
-    std::cout << file_name.find(".jpeg") << "\n";
-
-    // if (file_name.find(".jpeg") != 0)
-    // {
-    //     file_name.replace(file_name.find(".jpeg"), 5, ".jpg");
-    // }
+   
+    std::cout << "Filename: " + file_name << std::endl;
+    std::cout << "Text to encode: "+ text <<std::endl;
 
     if (path.empty())
     {
         std::cout << "INFO: Passed path is empty. The image will be written in the default path." << std::endl;
         path = "./";
     }
-    // Filepath needs to end with / to work with Encode function
-    if (path.back() != '/')
-    {
-        path = path + "/";
+    if (std::filesystem::exists(path)==0){
+        return "ERROR: Passed filepath does not exist.";
     }
+
     if (size < 11)
     {
         std::cout << "ERROR: Passed size is too small. The size should be >10." << std::endl;
@@ -73,9 +77,6 @@ std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_na
         std::cout << "WARNING: Passed margin is negativ. It will be discraded" << std::endl;
         margin = 0;
     }
-
-    std::cout << "requirements checked..."
-              << "\n";
 
     BarcodeFormat code_type = BarcodeFormatFromString("QRCode");
     CharacterSet encoding = CharacterSetFromString("UTF8");
@@ -91,11 +92,11 @@ std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_na
 
     bool success = false;
 
-    if (file_name.find(".jpg") != 0)
+    if (file_name.find(".jpg") != std::string::npos || file_name.find(".jpeg") != std::string::npos)
     {
         success = stbi_write_jpg(path.append(file_name).c_str(), bitmap.width(), bitmap.height(), 1, bitmap.data(), 0);
     }
-    else if (file_name.find(".png") != 0)
+    else if (file_name.find(".png") != std::string::npos)
     {
         success = stbi_write_png(path.append(file_name).c_str(), bitmap.width(), bitmap.height(), 1, bitmap.data(), 0);
     }

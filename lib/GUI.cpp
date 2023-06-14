@@ -235,6 +235,7 @@ int gui_handler(int argc, char **argv)
     qrData.set_output_decoder_entry(decoded_text_textview);
     qrData.set_input_text_encoder_entry(input_text_encoder_entry);
     qrData.set_filename_entry(input_filename_encoder_entry);
+    qrData.set_output_filepath_entry(input_filepath_encoder_entry);
     qrData.set_message_log_textview(message_log_textview);
 
     // Show all widgets
