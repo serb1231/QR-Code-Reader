@@ -33,34 +33,43 @@ std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_na
     {
         return "ERROR: Passed text is empty.";
     }
+
+    if (text.length() > 2952)
+    {
+        return "ERROR: Passed text is too long. Maximum number of characters are 2952.";
+    }
+
     if (file_name.empty())
     {
         return "ERROR: Passed file name is empty.";
     }
 
-    if(file_name.length()>=5){
-        std::string last5char = file_name.substr(file_name.length()-5);
-        std::string last4char = file_name.substr(file_name.length()-4);
+    if (file_name.length() >= 5)
+    {
+        std::string last5char = file_name.substr(file_name.length() - 5);
+        std::string last4char = file_name.substr(file_name.length() - 4);
 
-         if (last4char.find(".jpg") == std::string::npos && last5char.find(".jpeg") == std::string::npos && last4char.find(".png") == std::string::npos)
+        if (last4char.find(".jpg") == std::string::npos && last5char.find(".jpeg") == std::string::npos && last4char.find(".png") == std::string::npos)
         {
             return "ERROR: Passed file name doesn't have a supported file type. Supported formats are .jpg, .jpeg and .png.";
         }
-    }else{
+    }
+    else
+    {
 
         return "ERROR: Passed file name doesn't have a supported file type. Supported formats are .jpg, .jpeg and .png.";
     }
 
-   
     std::cout << "Filename: " + file_name << std::endl;
-    std::cout << "Text to encode: "+ text <<std::endl;
+    std::cout << "Text to encode: " + text << std::endl;
 
     if (path.empty())
     {
         std::cout << "INFO: Passed path is empty. The image will be written in the default path." << std::endl;
         path = "./";
     }
-    if (std::filesystem::exists(path)==0){
+    if (std::filesystem::exists(path) == 0)
+    {
         return "ERROR: Passed filepath does not exist.";
     }
 
