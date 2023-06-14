@@ -25,7 +25,7 @@ public:
     GtkWidget *get_input_filepath_entry();
 
     void set_output_decoder_entry(GtkWidget *NewEntry);
-    GtkWidget *get_output_decoder_textfield();
+    GtkWidget *get_output_decoder_entry();
 
     void set_input_text_encoder_entry(GtkWidget *NewEntry);
     GtkWidget *get_input_text_encoder_entry();

@@ -35,7 +35,7 @@ void QRData::set_output_decoder_entry(GtkWidget *NewEntry)
     QRData::output_decoder_entry = NewEntry;
 }
 
-GtkWidget *QRData::get_output_decoder_textfield()
+GtkWidget *QRData::get_output_decoder_entry()
 {
     return QRData::output_decoder_entry;
 }

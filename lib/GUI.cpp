@@ -10,6 +10,25 @@
 
 #define STD_PADDING 5
 
+void print_to_decode_output(std::string message, QRData *qrData)
+{
+    std::cout << message << std::endl;
+
+    // Cast the data pointer to a GtkTextView pointer
+    GtkTextView *textview = GTK_TEXT_VIEW(qrData->get_output_decoder_entry());
+
+    // Get the GtkTextBuffer of the decoded_text_textview
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
+
+    // Insert the new text into the buffer
+    const gchar *new_text = message.c_str();
+    gtk_text_buffer_insert_at_cursor(buffer, new_text, -1);
+
+    // Scroll the textview to the end
+    GtkTextMark *mark = gtk_text_buffer_get_insert(buffer);
+    gtk_text_view_scroll_to_mark(textview, mark, 0.0, TRUE, 0.0, 1.0);
+}
+
 void print_to_gui_log(std::string message, QRData *qrData)
 {
     std::cout << message << std::endl;
@@ -21,6 +40,7 @@ void print_to_gui_log(std::string message, QRData *qrData)
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
 
     // Insert the new text into the buffer
+    message += "\n";
     const gchar *new_text = message.c_str();
     gtk_text_buffer_insert_at_cursor(buffer, new_text, -1);
 
@@ -55,7 +75,7 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
 
     if (std::filesystem::exists(data->get_input_filepath()) == 0)
     {
-        std::cout << "Failed to load file! Use \"Open filepath\" first." << std::endl;
+        print_to_gui_log("Failed to load file! Use \"Open filepath\" first.", data);
         return;
     }
 
@@ -64,8 +84,12 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
     if (output != "No QR code detected!")
     {
         data->set_decoded_text(output);
+        print_to_decode_output(output, data);
     }
-    print_to_gui_log(output, data);
+    else
+    {
+        print_to_gui_log(output, data);
+    }
 }
 
 // Button click event handler
@@ -75,7 +99,7 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
 
     auto enc = ZX_Encoder();
     std::string input_text_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_text_encoder_entry()));
-    std::string path_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_entry()));
+    std::string path_entry = gtk_entry_get_text(GTK_ENTRY(data->get_output_filepath_entry()));
     std::string input_filename_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_filename_entry()));
 
     if (path_entry.back() != '/')
@@ -83,19 +107,12 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
         path_entry = path_entry + "/";
     }
 
-    std::string err = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 100, 0);
-
     std::string output = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 100, 0);
     print_to_gui_log(output, data);
     if (output == "Image created successfully!")
     {
         std::string full_image_path = path_entry + input_filename_encoder_entry;
-
         open_image(full_image_path, *data);
-    }
-    else
-    {
-        std::cout << output << std::endl;
     }
 }
 
@@ -198,7 +215,7 @@ int gui_handler(int argc, char **argv)
     gtk_table_attach(GTK_TABLE(table), input_text_encoder_entry, 2, 15, 10, 11, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
 
     // Create a third entry buffer for manual text input for the filename
-    GtkEntryBuffer *input_filename_encoder_eBuffe = gtk_entry_buffer_new("filename (.jpg or .png)", -1);
+    GtkEntryBuffer *input_filename_encoder_eBuffe = gtk_entry_buffer_new("filename (.jpg, jpeg or .png)", -1);
     // Create a text input field
     GtkWidget *input_filename_encoder_entry = gtk_entry_new_with_buffer(input_filename_encoder_eBuffe);
     gtk_entry_set_visibility(GTK_ENTRY(input_filename_encoder_entry), TRUE);
