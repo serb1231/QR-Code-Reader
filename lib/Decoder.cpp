@@ -55,17 +55,9 @@ for(double alpha = 0.5; alpha <= 2; alpha += 0.5) {
         croppedImage = QRimage(roi);
     }
 
-    /// Check if image is still in size range
-    width = croppedImage.cols;
-    height = croppedImage.rows;
-
-    /// Image too big, resize it to ~500x500
-    while (width > 500 || height > 500)
-    {
-        width *= 0.9;
-        height *= 0.9;
-        cv::resize(croppedImage, croppedImage, cv::Size(width, height));
-    }
+     
+    /// Change size to be decoded
+    cv::resize(croppedImage, croppedImage, cv::Size(500,500));
 
     /// Convert image to binary image
     cv::Mat binaryImage;
