@@ -12,7 +12,7 @@
 
 void print_to_gui_log(std::string message, QRData *qrData)
 {
-    g_print("%s", message);
+    std::cout << message << std::endl;
 
     // Cast the data pointer to a GtkTextView pointer
     GtkTextView *textview = GTK_TEXT_VIEW(qrData->get_message_log_textview());
@@ -37,7 +37,7 @@ void open_image(const std::string &path, QRData qrData)
 
     if (!image.data)
     {
-        print_to_gui_log("Seleced File was not an image\n", &qrData);
+        print_to_gui_log("Seleced File was not an image", &qrData);
         return;
     }
 
@@ -58,7 +58,7 @@ void decode_button_clicked(GtkWidget *widget, gpointer user_data)
     {
         data->set_decoded_text(output);
     }
-    print_to_gui_log(output + "\n", data);
+    print_to_gui_log(output, data);
 }
 
 // Button click event handler
@@ -73,7 +73,7 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
 
     std::string output = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 100, 0);
     print_to_gui_log(output, data);
-    if (output == "Image created successfully!\n")
+    if (output == "Image created successfully!")
     {
         std::string full_image_path = path_entry + input_filename_encoder_entry;
         open_image(full_image_path, *data);
@@ -89,7 +89,7 @@ void path_entry_button_clicked(GtkWidget *widget, gpointer user_data)
     QRData *data = static_cast<QRData *>(user_data);
 
     std::string input = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_textfield()));
-    print_to_gui_log("Your entered: " + input + "\n", data);
+    print_to_gui_log("Your entered: " + input, data);
 
     auto finder = ImageFinder();
 
@@ -100,7 +100,7 @@ void path_entry_button_clicked(GtkWidget *widget, gpointer user_data)
     }
     else
     {
-        print_to_gui_log("Filepath does not lead to image. Please try again!\n", data);
+        print_to_gui_log("Filepath does not lead to image. Please try again!", data);
     }
 }
 
@@ -123,13 +123,13 @@ void explorer_button_clicked(GtkWidget *widget, gpointer user_data)
 
         open_image(filename, *data);
 
-        print_to_gui_log("Selected file: " + filename + "\n", data);
+        print_to_gui_log("Selected file: " + filename, data);
         gtk_entry_set_text(GTK_ENTRY(data->get_input_filepath_textfield()), filename.c_str());
         data->set_input_filepath(filename);
     }
     else
     {
-        print_to_gui_log("File selection canceled by the user\n", data);
+        print_to_gui_log("File selection canceled by the user", data);
     }
 
     gtk_widget_destroy(dialog);
@@ -149,19 +149,6 @@ int gui_handler(int argc, char **argv)
     // Create a table container
     GtkWidget *table = gtk_table_new(200, 200, false);
     gtk_container_add(GTK_CONTAINER(window), table);
-
-    // GtkWidget *fixed = gtk_fixed_new();
-    // gtk_container_add(GTK_CONTAINER(window), fixed);
-
-    // // Create a GTK Notebook
-    // GtkWidget *notebook = gtk_notebook_new();
-    // gtk_container_add(GTK_CONTAINER(window), notebook);
-
-    // GtkWidget *page1 = gtk_label_new("Decoder");
-    // GtkWidget *page2 = gtk_label_new("Encoder");
-
-    // gtk_notebook_append_page(GTK_NOTEBOOK(notebook), table, page1);
-    // gtk_notebook_append_page(GTK_NOTEBOOK(notebook), fixed, page2);
 
     // Create an entry buffer for manual path and file input for the decoder
     GtkEntryBuffer *input_path_decoder_eBuffer = gtk_entry_buffer_new("filepath to image", -1);
@@ -225,7 +212,7 @@ int gui_handler(int argc, char **argv)
     g_signal_connect(decode_button, "clicked", G_CALLBACK(decode_button_clicked), &qrData);
 
     GtkWidget *encode_button = gtk_button_new_with_label("Encode Text to QR-Image");
-    // gtk_table_attach(GTK_TABLE(table), encode_button, 2, 3, 12, 13, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
+    gtk_table_attach(GTK_TABLE(table), encode_button, 2, 3, 12, 13, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
     g_signal_connect(encode_button, "clicked", G_CALLBACK(encode_button_clicked), &qrData);
 
     // Setting qrData variables
@@ -234,9 +221,6 @@ int gui_handler(int argc, char **argv)
     qrData.set_input_text_encoder_entry(input_text_encoder_entry);
     qrData.set_filename_entry(input_filename_encoder_entry);
     qrData.set_message_log_textview(message_log_textview);
-
-    gtk_fixed_put(GTK_FIXED(fixed), encode_button, 50, 50);
-    gtk_widget_set_size_request(encode_button, 100, 30);
 
     // Show all widgets
     gtk_widget_show_all(window);
