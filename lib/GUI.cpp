@@ -295,7 +295,7 @@ int gui_handler(int argc, char **argv)
     g_signal_connect(decode_button, "clicked", G_CALLBACK(decode_button_clicked), &qrData);
 
     GtkWidget *encode_button = gtk_button_new_with_label("Encode Text to QR");
-    gtk_fixed_put(GTK_FIXED(fixed), encode_button, 1 * STD_SIZE, 22 * STD_SIZE);
+    gtk_fixed_put(GTK_FIXED(fixed), encode_button, padding_size * STD_SIZE, (4 * widget_medium_height + widget_large_height + 8 * padding_size) * STD_SIZE);
     gtk_widget_set_size_request(encode_button, widget_medium_width * STD_SIZE, widget_medium_height * STD_SIZE);
     g_signal_connect(encode_button, "clicked", G_CALLBACK(encode_button_clicked), &qrData);
 
