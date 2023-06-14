@@ -44,11 +44,11 @@ std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_na
 
          if (last4char.find(".jpg") == std::string::npos && last5char.find(".jpeg") == std::string::npos && last4char.find(".png") == std::string::npos)
         {
-            return "ERROR: Passed file name doesn't have a file type. Supported formats are .jpg, .jpeg and .png.";
+            return "ERROR: Passed file name doesn't have a supported file type. Supported formats are .jpg, .jpeg and .png.";
         }
     }else{
 
-        return "ERROR: Passed file name doesn't have a file type. Supported formats are .jpg, .jpeg and .png.";
+        return "ERROR: Passed file name doesn't have a supported file type. Supported formats are .jpg, .jpeg and .png.";
     }
 
    
@@ -105,5 +105,5 @@ std::string ZX_Encoder::encode_text_QRcode(std::string text, std::string file_na
     {
         return "Failed to write image: " + file_name + " to " + path;
     }
-    return "Image created successfully!\n";
+    return "Image created successfully!";
 }

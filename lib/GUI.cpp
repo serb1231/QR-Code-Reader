@@ -110,7 +110,7 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
 
     std::string output = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 500, 20);
     print_to_gui_log(output, data);
-    if (output == "Image created successfully!\n")
+    if (output == "Image created successfully!")
     {
         std::string full_image_path = path_entry + input_filename_encoder_entry;
         open_image(full_image_path, *data);
