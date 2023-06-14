@@ -10,6 +10,15 @@ std::string QRData::get_input_filepath()
     return QRData::input_filepath;
 }
 
+void QRData::set_output_filepath(const std::string &filepath)
+{
+    QRData::output_filepath = filepath;
+}
+std::string QRData::get_output_filepath()
+{
+    return QRData::output_filepath;
+}
+
 void QRData::set_decoded_text(const std::string &text)
 {
     QRData::decoded_text = text;

@@ -6,6 +6,7 @@ struct QRData
 
 private:
     std::string input_filepath;
+    std::string output_filepath;
     std::string decoded_text;
     GtkWidget *input_filepath_entry;
     GtkWidget *output_decoder_entry;
@@ -17,6 +18,9 @@ private:
 public:
     void set_input_filepath(const std::string &filename);
     std::string get_input_filepath();
+
+    void set_output_filepath(const std::string &filepath);
+    std::string get_output_filepath();
 
     void set_decoded_text(const std::string &text);
     std::string get_decoded_text();
