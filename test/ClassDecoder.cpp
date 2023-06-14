@@ -1,14 +1,15 @@
 #include <Decoder.hpp>
 #include <stdio.h>
 
-int main(){
+int main()
+{
 
     auto dec = Decoder();
+    std::string data;
 
-    cv::Mat image = cv::imread("../../QR_Code_Foto_Technopedia.jpg");
-    int err = dec.decode(image);
+    cv::Mat image = cv::imread("../../test_images/tractor-school-qr-code.png");
+    data = dec.decode(image);
+    std::cout << data << std::endl;
 
-    return err;
-
+    return 0;
 }
-
