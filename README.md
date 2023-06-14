@@ -8,8 +8,11 @@ This project aim is to deliver a program capable of offering its users a seamles
 The project uses the following libraries:
 
     * doxygen version 1.9.2: A documentation generator for generating project documentation.
+
     * opencv version 4.5.5: A computer vision library for image processing and computer vision algorithms.
+
     * zxing-cpp version 2.0.0: A C++ port of the ZXing library for QR code encoding and decoding.
+    
     * stb version cci.20220909: A collection of single-file public domain libraries for C/C++.
 
 ## Building the Project
