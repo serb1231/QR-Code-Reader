@@ -46,11 +46,18 @@ void open_image(const std::string &path, QRData qrData)
     cv::waitKey(0);
 }
 
+// Button click event handler
 void decode_button_clicked(GtkWidget *widget, gpointer user_data)
 {
     QRData *data = static_cast<QRData *>(user_data);
 
     auto dec = Decoder();
+
+    if (std::filesystem::exists(data->get_input_filepath()) == 0)
+    {
+        std::cout << "Failed to load file! Use \"Open filepath\" first." << std::endl;
+        return;
+    }
 
     cv::Mat image = cv::imread(data->get_input_filepath());
     std::string output = "\n" + dec.decode(image);
@@ -68,14 +75,22 @@ void encode_button_clicked(GtkWidget *widget, gpointer user_data)
 
     auto enc = ZX_Encoder();
     std::string input_text_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_text_encoder_entry()));
-    std::string path_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_textfield()));
+    std::string path_entry = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_entry()));
     std::string input_filename_encoder_entry = gtk_entry_get_text(GTK_ENTRY(data->get_filename_entry()));
+
+    if (path_entry.back() != '/')
+    {
+        path_entry = path_entry + "/";
+    }
+
+    std::string err = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 100, 0);
 
     std::string output = enc.encode_text_QRcode(input_text_encoder_entry, input_filename_encoder_entry, path_entry, 100, 0);
     print_to_gui_log(output, data);
     if (output == "Image created successfully!")
     {
         std::string full_image_path = path_entry + input_filename_encoder_entry;
+
         open_image(full_image_path, *data);
     }
     else
@@ -88,7 +103,7 @@ void path_entry_button_clicked(GtkWidget *widget, gpointer user_data)
 {
     QRData *data = static_cast<QRData *>(user_data);
 
-    std::string input = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_textfield()));
+    std::string input = gtk_entry_get_text(GTK_ENTRY(data->get_input_filepath_entry()));
     print_to_gui_log("Your entered: " + input, data);
 
     auto finder = ImageFinder();
@@ -124,7 +139,7 @@ void explorer_button_clicked(GtkWidget *widget, gpointer user_data)
         open_image(filename, *data);
 
         print_to_gui_log("Selected file: " + filename, data);
-        gtk_entry_set_text(GTK_ENTRY(data->get_input_filepath_textfield()), filename.c_str());
+        gtk_entry_set_text(GTK_ENTRY(data->get_input_filepath_entry()), filename.c_str());
         data->set_input_filepath(filename);
     }
     else
@@ -216,8 +231,8 @@ int gui_handler(int argc, char **argv)
     g_signal_connect(encode_button, "clicked", G_CALLBACK(encode_button_clicked), &qrData);
 
     // Setting qrData variables
-    qrData.set_input_filepath_textfield(input_filepath_decoder_entry);
-    qrData.set_output_decoder_textfield(decoded_text_textview);
+    qrData.set_input_filepath_entry(input_filepath_decoder_entry);
+    qrData.set_output_decoder_entry(decoded_text_textview);
     qrData.set_input_text_encoder_entry(input_text_encoder_entry);
     qrData.set_filename_entry(input_filename_encoder_entry);
     qrData.set_message_log_textview(message_log_textview);

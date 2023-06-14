@@ -20,17 +20,17 @@ std::string QRData::get_decoded_text()
     return QRData::decoded_text;
 }
 
-void QRData::set_input_filepath_textfield(GtkWidget *NewEntry)
+void QRData::set_input_filepath_entry(GtkWidget *NewEntry)
 {
     QRData::input_filepath_textfield = NewEntry;
 }
 
-GtkWidget *QRData::get_input_filepath_textfield()
+GtkWidget *QRData::get_input_filepath_entry()
 {
     return QRData::input_filepath_textfield;
 }
 
-void QRData::set_output_decoder_textfield(GtkWidget *NewTextfield)
+void QRData::set_output_decoder_entry(GtkWidget *NewTextfield)
 {
     QRData::textfield = NewTextfield;
 }

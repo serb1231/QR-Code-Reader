@@ -20,10 +20,10 @@ public:
     void set_decoded_text(const std::string &text);
     std::string get_decoded_text();
 
-    void set_input_filepath_textfield(GtkWidget *NewEntry);
-    GtkWidget *get_input_filepath_textfield();
+    void set_input_filepath_entry(GtkWidget *NewEntry);
+    GtkWidget *get_input_filepath_entry();
 
-    void set_output_decoder_textfield(GtkWidget *NewTextfield);
+    void set_output_decoder_entry(GtkWidget *NewTextfield);
     GtkWidget *get_output_decoder_textfield();
 
     void set_input_text_encoder_entry(GtkWidget *NewEntry);
