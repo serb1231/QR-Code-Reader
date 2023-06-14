@@ -17,10 +17,10 @@ To achieve this the project uses the following libraries:
 To build the project locally, you need to ensure that the appropriate settings are set in the Conan profile file. The Conan package manager is used to handle the project's dependencies.
 
 Please follow the steps below to configure the Conan profile
-1. Locate the Conan profile file. The default location for the profile file is usually
+1. Locate the Conan profile file. The default location for the profile file is usually <br>
     ~/.conan/profiles/default
 2. Open the profile file using a text editor.
-3. Verify that the following settings are added at the bottom in the profile file:
+3. Verify that the following settings are added at the bottom in the profile file: <br>
     [env]
     tools.system.package_manager:mode = install
     tools.system.package_manager:sudo = True
@@ -32,29 +32,29 @@ Once you have configured the Conan profile, you can proceed with building the pr
 
 To build the project, follow these steps:
 
-5. Clone the project repository:
+5. Clone the project repository:<br>
     https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
 
-6. Change to the project directory:
+6. Change to the project directory:<br>
     cd GroupNProject
 
-7. Create a build directory:
+7. Create a build directory:<br>
     mkdir build
     cd build
 
-8. Initialize Conan:
+8. Initialize Conan:<br>
     conan install ..
 
-9. Configure the build system (CMake):
+9. Configure the build system (CMake):<br>
     cmake ..
 
-10. Build the project:
+10. Build the project:<br>
     make
 
-11. Switch to the bin directory:
+11. Switch to the bin directory:<br>
     cd bin
 
-12. Run the project:
+12. Run the project:<br>
     ./UI_test
 
 Please note: these instructions assume you have already installed the required dependencies and have a suitable C++ compiler installed on your system.
