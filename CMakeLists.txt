@@ -153,15 +153,7 @@ install(EXPORT ${PROJECT_NAME}_Targets
 install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
               "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
         DESTINATION ${LOCAL_CONFIG_DIR})
-
-
-################### WRAPPING ####################
-# wrap library for use in different languages
-option(BUILD_PYTHON "Build python module" ON)
-if(BUILD_PYTHON)
-  add_subdirectory(wrapping)
-endif()
-
+        
 
 ################### TESTING #####################
 # only include tests if the current project is being built
