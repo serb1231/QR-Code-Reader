@@ -100,17 +100,10 @@ To achieve a successful encode, make sure to follow these steps:
 If every input was correct the message "Image created successfully!" should appear, and the newly created image is opened in a separate window. 
 Any error that occurs when trying to encode should be output to the bottom text output field. Errors could be a wrong filepath, missing file extension, missing text to encode… the type of error should be easily recognizable through the error message.
 
-## Documentation
-
-The project documentation can be generated using Doxygen. To generate the documentation, first run 
-
-       cmake .. -DBUILD_DOCS=ON
-
-while in the build folder. Then execute the following command:
-
-       make docs
-
-The generated documentation will be available in the build/docs directory.
+## Future Work
+Our plans for the further development of this project encompass two significant aspects:
+* __Improved Documentation__:Modifying the comments in the code to support doxygen, for easier documentation. By utilizing the power of Doxygen, we anticipate making our project more user-friendly and comprehensible for future developers and users
+* __Advanced Image Processing:__ We have functions that are able to takes different images that are very simmilar, but have different types of noise, and combine them to get a clear image. The next step would be implementing this in the UI, as a specific function for the user.
 
 ## License
 This project is licensed under the GNU GENERAL PUBLIC LICENSE
