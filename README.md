@@ -18,66 +18,44 @@ To build the project locally, you need to ensure that the appropriate settings a
 
 Please follow the steps below to configure the Conan profile
 1. Locate the Conan profile file. The default location for the profile file is usually <br>
-```
-~/.conan/profiles/default.
-```
+    ~/.conan/profiles/default.
 2. Open the profile file using a text editor.
-
 3. Verify that the following settings are added in the profile file:
-```
-[env]
-tools.system.package_manager:mode = install
-tools.system.package_manager:sudo = True
-```
+    [env]
+    tools.system.package_manager:mode = install
+    tools.system.package_manager:sudo = True
 
 4. Save the changes to the profile file.
-
 Once you have configured the Conan profile, you can proceed with building the project.
 
 ## Building Instructions
 
-To build the project, follow these steps
+To build the project, follow these steps:
 
 5. Clone the project repository:
-```
-https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
-```
+    https://stea.iue.tuwien.ac.at/CppProjects2023/GroupNProject.git
 
 6. Change to the project directory:
-```
-cd GroupNProject
-```
+    cd GroupNProject
 
 7. Create a build directory:
-```
-mkdir build
-cd build
-```
+    mkdir build
+    cd build
 
 8. Initialize Conan:
-```
-conan install ..
-```
+    conan install ..
 
 9. Configure the build system (CMake):
-```
-cmake ..
-```
+    cmake ..
 
 10. Build the project
-```
-make
-```
+    make
 
 11. Switch to the bin folder
-```
-cd bin
-```
+    cd bin
 
 12. Run the project:
-```
-./UI_test
-```
+    ./UI_test
 
 Please note that these instructions assume you have already installed the required dependencies and have a suitable C++ compiler installed on your system.
 
@@ -110,9 +88,8 @@ If every input was correct the message “Image created successfully!” should 
 
 The project documentation can be generated using Doxygen. To generate the documentation, execute the following command in the project root directory:
 
-```
-doxygen Doxyfile
-```
+    doxygen Doxyfile
+
 
 The generated documentation will be available in the docs directory.
 
