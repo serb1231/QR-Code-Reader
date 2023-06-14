@@ -209,6 +209,7 @@ int gui_handler(int argc, char **argv)
     GdkColor color;
     const gchar* background_c = "#efbbcc";
     const gchar* button_c = "#00cdcd";
+    const gchar* highlight_c = "#fc8eac";
     const gchar* textfield_c = "#00eeee";
 
     // Create a GTK window
@@ -301,6 +302,8 @@ int gui_handler(int argc, char **argv)
     // Change color of path_entry_button
     gdk_color_parse (button_c, &color);
     gtk_widget_modify_bg (GTK_WIDGET(path_entry_button), GTK_STATE_NORMAL, &color);
+    gdk_color_parse (highlight_c, &color);
+    gtk_widget_modify_bg(GTK_WIDGET(path_entry_button), GTK_STATE_PRELIGHT, &color);
 
     // the explorer button shouldn't have text but only an icon
     GtkWidget *input_explorer_button = gtk_button_new_with_label("");
@@ -312,6 +315,8 @@ int gui_handler(int argc, char **argv)
     // Change color of input_explorer_button
     gdk_color_parse (button_c, &color);
     gtk_widget_modify_bg (GTK_WIDGET(input_explorer_button), GTK_STATE_NORMAL, &color);
+    gdk_color_parse (highlight_c, &color);
+    gtk_widget_modify_bg(GTK_WIDGET(input_explorer_button), GTK_STATE_PRELIGHT, &color);
 
     GtkWidget *decode_button = gtk_button_new_with_label("Decode QR-Image");
     gtk_table_attach(GTK_TABLE(table), decode_button, 5, 6, 3, 4, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
@@ -320,6 +325,8 @@ int gui_handler(int argc, char **argv)
     // Change color of decode_button
     gdk_color_parse (button_c, &color);
     gtk_widget_modify_bg (GTK_WIDGET(decode_button), GTK_STATE_NORMAL, &color);
+    gdk_color_parse (highlight_c, &color);
+    gtk_widget_modify_bg(GTK_WIDGET(decode_button), GTK_STATE_PRELIGHT, &color);
 
     GtkWidget *encode_button = gtk_button_new_with_label("Encode Text to QR-Image");
     gtk_table_attach(GTK_TABLE(table), encode_button, 2, 3, 13, 14, GTK_FILL, GTK_FILL, STD_PADDING, STD_PADDING);
@@ -328,6 +335,8 @@ int gui_handler(int argc, char **argv)
     // Change color of encode_button
     gdk_color_parse (button_c, &color);
     gtk_widget_modify_bg (GTK_WIDGET(encode_button), GTK_STATE_NORMAL, &color);
+    gdk_color_parse (highlight_c, &color);
+    gtk_widget_modify_bg(GTK_WIDGET(encode_button), GTK_STATE_PRELIGHT, &color);
 
     // the explorer button shouldn't have text but only an icon
     GtkWidget *output_explorer_button = gtk_button_new_with_label("");
@@ -339,6 +348,8 @@ int gui_handler(int argc, char **argv)
     // Change color of output_explorer_button
     gdk_color_parse (button_c, &color);
     gtk_widget_modify_bg (GTK_WIDGET(output_explorer_button), GTK_STATE_NORMAL, &color);
+    gdk_color_parse (highlight_c, &color);
+    gtk_widget_modify_bg(GTK_WIDGET(output_explorer_button), GTK_STATE_PRELIGHT, &color);
 
 
     // Setting qrData variables
