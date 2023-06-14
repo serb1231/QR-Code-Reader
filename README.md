@@ -104,6 +104,8 @@ Any error that occurs when trying to encode should be output to the bottom text 
 Our plans for the further development of this project encompass two significant aspects:
 * __Improved Documentation__:Modifying the comments in the code to support doxygen, for easier documentation. By utilizing the power of Doxygen, we anticipate making our project more user-friendly and comprehensible for future developers and users
 * __Advanced Image Processing:__ We have functions that are able to takes different images that are very simmilar, but have different types of noise, and combine them to get a clear image. The next step would be implementing this in the UI, as a specific function for the user.
+* __Option for Camera and Screenshot:__ With this you could just take a screenshot within the program, or access your camera to decode codes.
+* __Actions based on content:__ for example automatically connect to a WiFi access point or perform other useful tasks, based on the encoded text.
 
 ## License
 This project is licensed under the GNU GENERAL PUBLIC LICENSE
