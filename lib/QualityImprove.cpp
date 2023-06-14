@@ -15,44 +15,33 @@ cv::Mat DenoiseFromObservations(const std::vector<cv::Mat> &observations, cv::Ma
     return result;
 }
 
-cv::Mat add_noiseLittle(cv::Mat &img)
-{
-    std::cout << "image channels, bafore noise " << img.channels() << std::endl;
-    cv::Mat noise(img.size(), img.type());
-    if (img.channels() == 1)
-    {
-        cv::Scalar m(10);
-        cv::Scalar sigma(1);
-        cv::randn(noise, m, sigma);
+// This function adds noise to one image
+cv::Mat add_noise(cv::Mat&img, bool aLot) {
+    std::cout<<"image channels, bafore noise "<<img.channels()<<std::endl;
+    cv::Mat noise(img.size(),img.type());
+    if(aLot == false){
+        if(img.channels() == 1) {
+            cv::Scalar m(10);
+            cv::Scalar sigma(1);
+            cv::randn(noise, m, sigma);
+        }
+        else {
+            cv::Scalar m(10, 12, 34);
+            cv::Scalar sigma(1, 5, 50);
+            cv::randn(noise, m, sigma);
+        }
     }
-    else
-    {
-        cv::Scalar m(10, 12, 34);
-        cv::Scalar sigma(1, 5, 50);
-        cv::randn(noise, m, sigma);
+    else {
+        if(img.channels() == 1) {
+            cv::Scalar m(0);
+            cv::Scalar sigma(25); // Increased sigma for greater noise variation
+            cv::randn(noise, m, sigma);
+        }
+        else {
+            cv::Scalar m(0, 0, 0);
+            cv::Scalar sigma(25, 25, 25); // Increased sigma for greater noise variation
+            cv::randn(noise, m, sigma);
     }
-
-    cv::Mat imgCopy = img.clone();
-    imgCopy += noise;
-    imgCopy = cv::min(imgCopy, 255);
-    imgCopy = cv::max(imgCopy, 0);
-    return imgCopy;
-}
-cv::Mat add_noiseLot(cv::Mat &img)
-{
-    std::cout << "image channels, bafore noise " << img.channels() << std::endl;
-    cv::Mat noise(img.size(), img.type());
-    if (img.channels() == 1)
-    {
-        cv::Scalar m(0);
-        cv::Scalar sigma(25); // Increased sigma value for greater noise variation
-        cv::randn(noise, m, sigma);
-    }
-    else
-    {
-        cv::Scalar m(0, 0, 0);
-        cv::Scalar sigma(25, 25, 25); // Increased sigma value for greater noise variation
-        cv::randn(noise, m, sigma);
     }
 
     cv::Mat imgCopy = img.clone();
@@ -62,8 +51,10 @@ cv::Mat add_noiseLot(cv::Mat &img)
     return imgCopy;
 }
 
-void DenoiseTakeFromFolder(char *path)
-{
+// this function takes the path to a folder
+// containing image with different types of noise
+// and creates a new image based on them
+cv::Mat DenoiseTakeFromFolder(char* path, bool isGrayScale) {
     DIR *dr;
     struct dirent *en;
     std::vector<cv::Mat> BlurryImg;
@@ -83,33 +74,31 @@ void DenoiseTakeFromFolder(char *path)
                 if (img.empty())
                 {
                     std::cout << "Could not open or find the image" << std::endl;
-                    return;
-                }
-                std::cout << "../test_images/SameImageBlurry/" + fileName << " " << img.cols << " " << img.rows << " " << img.channels() << std::endl;
-                imgCount++; // Increment the counter
+                }else{
+                imgCount++;
                 BlurryImg.push_back(img);
+                }
             }
         }
         closedir(dr);
-        cv::waitKey();
     }
-    cv::Mat result;
-    cv::denoise_TVL1(BlurryImg, result, 1.0, 30);
-    cv::imwrite("denoised_image.jpg", result);
+        cv::Mat result;
+        cv::denoise_TVL1(BlurryImg, result, 1.0, 30);
+        return result;
 }
 
-void TestNoiseSameImageAndDenoise(std::string path)
-{
+
+// A test for adding noise to the same image, and then denoise them
+cv::Mat TestNoiseSameImageAndDenoise(std::string path) {
     cv::Mat img = cv::imread(path, cv::IMREAD_GRAYSCALE);
-    if (img.empty())
-    {
-        std::cout << "Could not open or find the image" << std::endl;
-        return;
-    }
-    cv::Mat noisyImg1 = add_noiseLittle(img);
-    cv::Mat noisyImg2 = add_noiseLot(img);
-    cv::imshow("first noisy image", noisyImg1);
-    cv::imshow("second noisy image", noisyImg2);
+    if (img.empty()) {
+    std::cout << "Could not open or find the image" << std::endl;
+    return cv::Mat();
+}
+    cv::Mat noisyImg1 = add_noise(img, false);
+    cv::Mat noisyImg2 = add_noise(img, true);
+    cv::imshow("first noisy image",noisyImg1);
+    cv::imshow("second noisy image",noisyImg2);
     std::vector<cv::Mat> etc;
     etc.push_back(noisyImg1);
     etc.push_back(noisyImg2);
@@ -117,46 +106,61 @@ void TestNoiseSameImageAndDenoise(std::string path)
     int niters = 30;     // by default
     cv::Mat result;
     cv::denoise_TVL1(etc, result, lambda, niters);
-    cv::imshow("Resulting", result);
-    cv::waitKey();
+    return result;
 }
 
-int main()
-{
-    // load image
-    // cv::Mat img = cv::imread("../test_images/QR_another_real_test_foto_2.jpg", cv::IMREAD_COLOR);
-    // if (img.empty()) {
-    //     std::cout << "Could not open or find the image" << std::endl;
-    //     return -1;
-    // }
+// perform operation on image to enhance sharp edges
+cv::Mat sharperImage(cv::Mat img) {
+    if (img.empty()) {
+        std::cerr << "We were passed an empty image; we returned an empty object" << std::endl;
+        return cv::Mat();
+    }
 
-    // // create a simple 3x3 kernel
-    // cv::Mat kernel = (cv::Mat_<float>(3,3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
-
-    // // perform deconvolution
-    // cv::Mat result = deconvolve(img, kernel);
-
-    // This gave a sharper image as a result
-    // cv::Mat result_detailEnhance;
-    // detailEnhance(img,result_detailEnhance, 10,0.15f);
-    // cv::imshow("Detail Enhances Image", result_detailEnhance);
-
-    // this would be good only for specific values
-    // we could iterate over them, and try to detect the QR code
-    // afterwards
-    // cv::Mat result_conversion;
-    // img.convertTo(result_conversion,-1,1,-100);
-    // cv::imshow("Conversion Image", result_conversion);
-    // cv::waitKey();
-
-    // no cuda support; the library needs cuda support for this
-    // cv::Mat result_denoise;
-    // cv::cuda::fastNlMeansDenoising(img, result_denoise,1,21,7,cv::cuda::Stream::Null());
-    // cv::imshow("Denoise Image", result_denoise);
-    // cv::waitKey();
-
-    DenoiseTakeFromFolder("../test_images/SameImageBlurry/");
-    TestNoiseSameImageAndDenoise("../test_images/SameImageBlurry/WhatsApp Image 2023-06-11 at 7.10.18 PM.jpeg");
-
-    return 0;
+    // Check the image depth and number of channels
+    if (img.depth() != CV_8U || img.channels() > 4) {
+        std::cerr << "The image depth should be CV_8U and number of channels less than 5." << std::endl;
+        return cv::Mat();
+    }
+    cv::Mat result_detailEnhance;
+    detailEnhance(img,result_detailEnhance, 10,0.15f);
+    return result_detailEnhance;
 }
+
+// change the brightness and contrast of an image
+// this could be used for hyperparameter detection as well, testing more alpha and beta
+cv::Mat ContrastBrightnessChange(cv::Mat img, double alpha, int beta) {
+
+    if (img.empty()) {
+    std::cerr << "We were passed an empty image; we returned an empty object" << std::endl;
+    return cv::Mat();
+    }
+    // Check the image depth and number of channels
+    if (img.depth() != CV_8U || img.channels() > 4) {
+        std::cerr << "The image depth should be CV_8U and number of channels less than 5." << std::endl;
+        return cv::Mat();
+    }
+
+    cv::Mat new_img = cv::Mat::zeros( img.size(), img.type() );
+    if (new_img.empty()) {
+    std::cerr << "Could not create new image" << std::endl;
+    return cv::Mat();
+    }
+
+    for( int y = 0; y < img.rows; y++ ) {
+        for( int x = 0; x < img.cols; x++ ) {
+            for( int c = 0; c < img.channels(); c++ ) {
+                new_img.at<cv::Vec3b>(y,x)[c] =
+                  cv::saturate_cast<uchar>( alpha*img.at<cv::Vec3b>(y,x)[c] + beta );
+            }
+        }
+    }
+    return new_img;
+}
+
+// cv::Mat HyperParameterDetectionContrastBrightness(cv::Mat img) {
+//     cv::Mat result;
+//     for(int alpha = 0.5;alpha<=1.5;alpha+=0.1) {
+//         for(int beta = -100;beta<=100; beta+=20)
+//             ContrastBrightnessChange(img, alpha, beta);
+//     }
+// }
