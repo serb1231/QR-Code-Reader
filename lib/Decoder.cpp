@@ -1,5 +1,6 @@
 #include <Decoder.hpp>
 #include <opencv2/opencv.hpp>
+#include <QualityImprove.hpp>
 
 std::string Decoder::decode(cv::Mat QRimage){
 
@@ -18,6 +19,15 @@ std::string Decoder::decode(cv::Mat QRimage){
         std::cout << "Image too small, please upload a bigger image." << std::endl;
         return "Image too small";
     }
+    cv::Mat initialImage = QRimage.clone();
+    std::string data;
+    
+for(double alpha = 0.5; alpha <= 2; alpha += 0.5) {
+        for(int beta = -100; beta <= 100; beta += 20) {
+
+    QRimage = ContrastBrightnessChange(initialImage, alpha, beta);
+    // apply a process to make the edges sharper
+    QRimage = sharperImage(QRimage);
 
     /// crop Image if code is detected
     /// Create a QR code detector object
@@ -69,10 +79,13 @@ std::string Decoder::decode(cv::Mat QRimage){
         return data;
     }
     else
-    {
+    {   
         /// QR code not detected or decoding failed
         std::cout << "QR code not found or decoding failed" << std::endl;
-        return "No QR-Code";
+        
     }
-
+        }
+}
+        
+        return "No QR-Code";
 }
