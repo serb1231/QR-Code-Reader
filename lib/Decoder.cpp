@@ -39,7 +39,7 @@ for(double alpha = 0.5; alpha <= 2; alpha += 0.5) {
     /// Detect the QR code and obtain the Region corner points
     bool detectionResult = qrDetector.detect(QRimage, points);
 
-    cv::Mat croppedImage;
+    cv::Mat croppedImage = QRimage;
 
     if (detectionResult) {
         /// Draw the quadrangle on the image
@@ -73,6 +73,7 @@ for(double alpha = 0.5; alpha <= 2; alpha += 0.5) {
     /// Detect and decode the QR code
     cv::QRCodeDetector qrDecoder;
     std::string data = qrDecoder.detectAndDecode(binaryImage, points);
+
     if (!data.empty())
     {
         /// QR code detected and decoded successfully
@@ -82,7 +83,6 @@ for(double alpha = 0.5; alpha <= 2; alpha += 0.5) {
     {   
         /// QR code not detected or decoding failed
         std::cout << "QR code not found or decoding failed" << std::endl;
-        
     }
         }
 }
