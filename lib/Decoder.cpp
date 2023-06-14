@@ -54,10 +54,6 @@ for(double alpha = 0.5; alpha <= 2; alpha += 0.5) {
         /// Crop the image using the ROI
         croppedImage = QRimage(roi);
     }
-    else
-    {
-        return "No QR code detected!";
-    }
 
     /// Check if image is still in size range
     width = croppedImage.cols;
